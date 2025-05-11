@@ -5,56 +5,21 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Вывод результатов ⭐</title>
+    <title>Консоль разработчика 🛠️</title>
     <style>
-        img {
-            max-width: 300px;
-        }
-        .title  {
-            color: red;
-            font-size: 28px;
-        }
 
-        .selected-title {
-            color: purple;
-            font-size: 30px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
-    <img id="image"
-         src="https://i.pinimg.com/originals/91/37/a8/9137a8fd2d1fa22357d5dd300550d96a.jpg"
-         alt="Котик на акуле">
-    <h1 class="title" id="title">Привет, мир!</h1>
-    <h2 id="title2"></h2>
-    <button onclick="changeContent()">Изменить текст</button>
-    <button onclick="changeImgSrc()">Изменить котика</button>
-    <button onclick="changeTitleStyle()">Изменить стиль заголовка</button>
     <script>
-        function changeContent() {
-            document.getElementById('title').innerHTML = 'Hello, world!';
-        }
+        console.log('Сообщение');
+        console.info('Информационное сообщение');
+        console.warn('Предупрждение');
+        console.error('Ошибка!');
+        console.time('Loop');
+        for (let i = 0; i < 10000; i++) {}
+        console.timeEnd('Loop');
 
-        function changeImgSrc() {
-            document.getElementById("image").src = 'https://i.pinimg.com/736x/a7/b0/44/a7b04406b6a1169556c1cff058be5608.jpg';
-            document.getElementById('image').alt = 'котик 2';
-        }
-
-        function changeTitleStyle() {
-            document.getElementById('title').classList.toggle("selected-title");
-        }
-        console.log("Начало вычисления");
-        const x = 10;
-        const y = 20;
-        console.log(`Результат вычислений: ${x + y}`);
-
-        const isSure = confirm('Вы уверены что хотите пойти в левую дверь?');
-        if (isSure) {
-            console.log('Круто! Это левая дверь');
-        } else {
-            console.log('Игра началась!');
-        }
 
     </script>
 </body>
