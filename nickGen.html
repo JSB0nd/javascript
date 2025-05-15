@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Никнейм Генератор</title> <!-- Создано в chatGPT-->
+  <style>
+    body {
+      font-family: sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    :root {
+      --bg-color: #1e1e2f;
+      --text-color: #f5f5f5;
+      --box-color: #2c2c3e;
+      --hover-color: #333354;
+    }
+    .light-theme {
+      --bg-color: #f0f0f0;
+      --text-color: #111;
+      --box-color: #fff;
+      --hover-color: #ddd;
+    }
+    .container {
+      background: var(--box-color);
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    h1 { text-align: center; }
+    .checkboxes label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    #output {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.5rem;
+      border: none;
+      background: #4caf50;
+      color: white;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #43a047;
+    }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    #history {
+      margin-top: 1.5rem;
+      max-height: 200px;
+      overflow-y: auto;
+      background: var(--box-color);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .history-item {
+      margin: 0.3rem 0;
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.3rem;
+    }
+    .history-item:hover {
+      background: var(--hover-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Генератор Никнеймов</h1>
+    <div class="checkboxes">
+      <label><input type="checkbox" id="tech" checked /> Техно-основа</label>
+      <label><input type="checkbox" id="actor" checked /> Актёры / Персонажи</label>
+      <label><input type="checkbox" id="geek" checked /> Гиковское / фронтенд</label>
+    </div>
+    <button onclick="generateNick()">Сгенерировать</button>
+    <div class="actions">
+      <button onclick="copyAll()">Скопировать всё</button>
+      <button onclick="saveToFile()">Сохранить в TXT</button>
+      <button onclick="toggleTheme()">Сменить тему</button>
+    </div>
+    <div id="output"></div>
+    <div id="history"></div>
+  </div>
+
+  <script>
+    const techWords = ["JS", "Code", "Dev", "Node", "React", "Vue", "DOM", "CSS", "JSON"];
+    const popRefs = ["Wick", "Bourne", "Rambo", "VanDamme", "Diesel", "Chan", "Snipes", "Knight", "Bond", "Snatch", "Fox", "Pool"];
+    const geekTerms = ["DOMinator", "Flexecutioner", "BugHunter", "NullWalker", "CSSniper", "TokenMage", "ZIndexHero"];
+    const connectors = ["", "_", "To", "Of", "The"];
+
+    const historyContainer = document.getElementById("history");
+    let historyList = [];
+
+    function getRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateNick() {
+      const useTech = document.getElementById("tech").checked;
+      const useActor = document.getElementById("actor").checked;
+      const useGeek = document.getElementById("geek").checked;
+
+      let result = "";
+
+      if (useGeek && Math.random() < 0.5) {
+        result = getRandom(geekTerms);
+      } else {
+        const parts = [];
+        if (useTech) parts.push(getRandom(techWords));
+        parts.push(getRandom(connectors));
+        if (useActor) parts.push(getRandom(popRefs));
+        result = parts.join("");
+      }
+
+      document.getElementById("output").textContent = result;
+      addToHistory(result);
+    }
+
+    function addToHistory(nick) {
+      if (historyList.includes(nick)) return;
+      historyList.unshift(nick);
+      if (historyList.length > 15) historyList.pop();
+      renderHistory();
+    }
+
+    function renderHistory() {
+      historyContainer.innerHTML = "";
+      historyList.forEach(nick => {
+        const div = document.createElement("div");
+        div.textContent = nick;
+        div.className = "history-item";
+        div.title = "Нажми, чтобы скопировать";
+        div.onclick = () => copyToClipboard(nick);
+        historyContainer.appendChild(div);
+      });
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`\"${text}\" скопировано в буфер обмена!`);
+      });
+    }
+
+    function copyAll() {
+      if (historyList.length === 0) return;
+      const allText = historyList.join("\n");
+      navigator.clipboard.writeText(allText).then(() => {
+        alert("Всё скопировано в буфер обмена!");
+      });
+    }
+
+    function saveToFile() {
+      if (historyList.length === 0) return;
+      const blob = new Blob([historyList.join("\n")], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "nicknames.txt";
+      link.click();
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light-theme");
+    }
+  </script>
+</body>
+</html>
