@@ -49,7 +49,7 @@ isEven(-9) // -9 является нечетным числом.
 let user
 
 function isEmpty(user) {
-    if ( user === "" || null ) {
+    if ( user === null || user === undefined || user === '' ) {
         console.log("Hello. Guest!");
     } else {
         console.log(`Hello, ${user}!`);
@@ -57,4 +57,6 @@ function isEmpty(user) {
 }
 
 isEmpty('Leonid') // Hello, Leonid!
-isEmpty(null) // 
+isEmpty(null) // Hello. Guest!
+isEmpty('') // Hello. Guest!
+isEmpty(undefined) // Hello. Guest!
