@@ -32,9 +32,32 @@ age = 15;
 let message2 = (age >= 18) ? `${age} лет, вы совершеннолетний!` : `${age} лет, вы несовершеннолетний :(`;
 console.log(message2); // 15 лет, вы несовершеннолетний :(
 
-// Проверка месяца
+// проверка числа
 
-let month = +prompt("Введи число месяца (1-12)");
+const number = +prompt('Введите любое число')
+let answer
+if (number > 0) {
+    answer = `Ваше число ${number} является положительным`
+} else if (number < 0) {
+    answer = `Ваше число ${number} является отрицательным`
+} else { 
+    answer = "Ноль же ж"
+}
+alert(answer)
+
+// либо тернарное условие в консоль лог
+
+const numberTernar = 12
+let messageTernar = (number >= 0)
+
+    ? "Положительное число"
+    : "Отрицательно число"
+
+console.log(`${number} - ${messageTernar} - тернарный оператор`)
+
+// проверка месяца
+
+let month = +prompt("Введи число месяца (1-12)"); // приведение к typeof Number
 let monthName;
 
 switch (month) {
@@ -76,8 +99,40 @@ switch (month) {
         break;
     default:
         monthName = 'Месяц неизвестен, введи число от 1 до 12'
-        break;
 }
 
 alert(`Месяц который ты ввёл ${monthName}!`) // показывает месяц, вне диапозона 1-12 выводит сообщение
 
+// А теперь самое жёсткое - проверка индекса массы тела! Ухх, я бы даже не начинал :|
+
+const heightCommon = +prompt ("Введи свой рост, см")
+const height = heightCommon/100 // перевод в метры
+const mass = +prompt ("Введи свой вес, кг") // здесь и так сойдет
+const imt = (mass / height ** 2).toFixed(2)
+let imtInfo
+
+switch(true) {
+    case (imt < 16 ):
+        imtInfo = 'выраженный дефицит массы тела, истощение'
+        break;
+    case (imt < 18.5 ):
+        imtInfo = 'недостаточная масса тела - дефицит'
+        break
+    case (imt < 25 ):
+        imtInfo = 'нормально всё'
+        break
+    case (imt < 30 ):
+        imtInfo = 'лишний вес, избыточная масса - преожирение'
+        break
+    case (imt < 35 ):
+        imtInfo = 'ожирение I степени'
+        break
+    case (imt < 40 ):
+        imtInfo = 'ожирение II степени'
+        break
+    default:
+        imtInfo = 'ожирение III степени - морбидное (это когда совсем пиздец, как в Блейде, чувак который лежал на кровати)'
+        break
+}
+
+alert(`Твой ${imt} - ${imtInfo}`)
