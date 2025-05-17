@@ -5,7 +5,7 @@ let age
 function checkAge(age) {
     if (age < 18) {
         console.log(`Ваш возраст ${age} лет, Вы несовершеннолетний!`)
-    } else if (age == 18) {
+    } else if (age === 18) {
         console.log(`Ваш возраст ${age} лет, Вы совершеннолетний!`)
     } else if (age < 35) {
         console.log(`Ваш возраст ${age} лет, Вы очень совершеннолетний!`)
@@ -40,7 +40,7 @@ if (number > 0) {
     answer = `Ваше число ${number} является положительным`
 } else if (number < 0) {
     answer = `Ваше число ${number} является отрицательным`
-} else { 
+} else {
     answer = "Ноль же ж"
 }
 alert(answer)
@@ -53,7 +53,7 @@ let messageTernar = (number >= 0)
     ? "Положительное число"
     : "Отрицательно число"
 
-console.log(`${number} - ${messageTernar} - тернарный оператор`)
+console.log(`${numberTernar} - ${messageTernar} - тернарный оператор`)
 
 // проверка месяца
 
