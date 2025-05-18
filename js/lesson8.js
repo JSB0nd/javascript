@@ -59,8 +59,8 @@ console.log(isNull == varUndefined); // true -- так как js приводи�
 // оба варианта дают TypeError, как будто это тру)
 console.log(isNull); // null
 console.log(varUndefined); // undefined
-//console.log(varUndefined.toString()); // Uncaught TypeError: Cannot read properties of undefined (reading 'toString')
-//console.log(isNull.toString()); // Uncaught TypeError: Cannot read properties of null (reading 'toString')
+console.log(varUndefined.toString()); // Uncaught TypeError: Cannot read properties of undefined (reading 'toString')
+console.log(isNull.toString()); // Uncaught TypeError: Cannot read properties of null (reading 'toString')
 console.log(isNull === null); // здесь true
 console.log(not_a_number === NaN); // а здесь будет false, потому что NaN !== NaN // true
 console.log (NaN === NaN); // здесь также будет false
