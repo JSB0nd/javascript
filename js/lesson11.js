@@ -20,6 +20,16 @@ checkIsPalindrom(123454321) // 123454321 - является палиндромо
 checkIsPalindrom('Лёша на полке клопа нашёл') // Лёша на полке клопа нашёл - является палиндромом - true
 checkIsPalindrom('Вася Пупкин') // Вася Пупкин - не палиндром - false
 
+function checkIsPalindrom2(string = 12321) {
+    const cleaned = string.toString().replace(/[^a-zа-яё0-9]/gi, '').toLowerCase()
+    const reversed = cleaned.split('').reverse().join('')
+
+    return cleaned === reversed
+}
+
+console.log(checkIsPalindrom2(13431)) // true
+console.log(checkIsPalindrom2(123)) // false
+
 // самое короткое слова
 
 function findShortestWord(sentence) {
@@ -69,22 +79,23 @@ function findMinMaxInArray(array) {
         const min = Math.min(...array)
         const max = Math.max(...array)
 
-        return console.log({min, max})
+        return {min, max}
     }
 
 const array = [-5, 1, 25, 65, -33, 99]
-const findedMinMax = findMinMaxInArray(array) // {min: -33, max: 99}
+const foundMinMax = findMinMaxInArray(array)
+console.log(foundMinMax) // {min: -33, max: 99}
 
 // массив на увеличение
 
-function incrementionArraysNumbers(arr) {
+function sortArrayAscending(arr) {
     return [...arr].sort((a, b) => a - b)
 }
 
-const sortedNewArray = incrementionArraysNumbers(array)
+const sortedNewArray = sortArrayAscending(array)
 console.log(sortedNewArray) // (6) [-33, -5, 1, 25, 65, 99]
 
-function bubbleSort(arr) {
+function bubbleSortAsc(arr) {
     const result = [...arr]
 
     for (let i = 0; i < result.length; i++ ) {
@@ -100,4 +111,4 @@ function bubbleSort(arr) {
     return result;
 }
 
-console.log(bubbleSort(array)) // (6) [-33, -5, 1, 25, 65, 99]
+console.log(bubbleSortAsc(array)) // (6) [-33, -5, 1, 25, 65, 99]
