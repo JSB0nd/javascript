@@ -70,7 +70,7 @@ function calculateTotal(items) {
     return items.reduce(function (total, item) {
         return total + item.price;
     }, 0);
-}
+};
 
 // 4 задание
 // Создайте функцию validateForm, которая принимает объект формы с полями name, email и password.
@@ -85,34 +85,50 @@ const user = {
 };
 
 function validateForm({ name, email, password}) {
-    if (!user.key) {
-        alert('Пожалуйста заполните все поля');
-        return;
+    if (!name || !email || !password) {
+        console.log('Пожалуйста заполните все поля');
+        return false;
     }
 
-    if (!isValidName(user.name)) {
-        alert('Имя может содержать только буквы');
-        return;
+    if (!isValidName(name)) {
+        console.log('Имя может содержать только буквы');
+        return false;
     }
 
-    if (!isValidEmail(user.email)) {
-        alert('Почта должна содержать @домен');
-        return;
+    if (!isValidEmail(email)) {
+        console.log('Почта должна содержать @домен');
+        return false;
     }
 
-    if (!isValidPassword(user.password)) {
-        alert(`Пароль должен содержать как минимум одну заглавную,
+    if (!isValidPassword(password)) {
+        console.log(`Пароль должен содержать как минимум одну заглавную,
             одну строчную буку и одну цифру`);
-            return;
+            return false;
     }
 
-    console.log('Всё хорошо')
+    console.log('Всё хорошо');
+    return true;
 
 }; // конечно использования в самом html тэгов type="text" или "phone" или "email" required было бы проще
 
 function isValidName(name) {
     const pattern = /^[a-zA-Z]+$/;
     return pattern.test(name);
-}
+};
 
-function isValidEmail(email)
+function isValidEmail(email) {
+    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;;
+    return pattern.test(email);
+};
+
+function isValidPassword(password) {
+    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,20}$/;
+    return pattern.test(password);
+};
+
+const validUser = validateForm(user);
+
+console.log(validUser);
+// Adult
+// Всё хорошо
+// true
