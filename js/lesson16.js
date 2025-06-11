@@ -1,8 +1,9 @@
 
 // click
 
-document.getElementById('p1').addEventListener('click', function() {
-    document.getElementById('button-click').classList.add('red')
+document.getElementById('button-click').addEventListener('click', function() {
+    this.classList.add('red')
+    this.textContent = 'Красный клик!!'
 })
 
 // mouseover
@@ -22,7 +23,7 @@ p2.addEventListener('mouseout', function() {
 
 const keyUp = document.getElementById('input-p3')
 keyUp.addEventListener('keyup', function(e) {
-    console.log(e.keyCode)
+    console.log(e.key)
 })
 
 // submit

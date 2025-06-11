@@ -1,0 +1,442 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ты машина или человек?</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: black;
+            color: #0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            border-bottom: 1px solid #0f0;
+            padding-bottom: 10px;
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            background-color: black;
+            color: #0f0;
+            border: 1px solid #0f0;
+            padding: 10px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #0f0;
+            color: black;
+        }
+        .hidden {
+            display: none;
+        }
+        .result {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        .matrix-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .progress {
+            margin-top: 20px;
+            color: #0f0;
+        }
+        .binary-flash {
+            animation: binaryFlash 0.5s;
+        }
+        @keyframes binaryFlash {
+            0% { color: #0f0; }
+            50% { color: black; background-color: #0f0; }
+            100% { color: #0f0; }
+        }
+        .translate-btn {
+            margin-top: 15px;
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .pill-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .pill {
+            width: 60px;
+            height: 100px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .pill:hover {
+            transform: scale(1.1);
+        }
+        .red-pill {
+            background: linear-gradient(to bottom, #ff0000, #990000);
+            border: 2px solid #ff3333;
+        }
+        .blue-pill {
+            background: linear-gradient(to bottom, #0066ff, #003399);
+            border: 2px solid #3399ff;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix" class="matrix-effect"></canvas>
+    <div class="container">
+        <h1>Ты машина или человек?</h1>
+        
+        <div id="quiz-container">
+            <div class="question" id="question"></div>
+            <button id="translate-btn" class="translate-btn hidden">Перевести</button>
+            <div class="answers" id="answers"></div>
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div id="result-container" class="hidden">
+            <div class="result" id="result"></div>
+            <div id="pill-question" class="hidden">
+                <p>Последний вопрос:</p>
+                <p>Какую таблетку ты выбираешь?</p>
+                <div class="pill-container">
+                    <div class="pill red-pill" id="red-pill">Красная</div>
+                    <div class="pill blue-pill" id="blue-pill">Синяя</div>
+                </div>
+            </div>
+            <button id="restart">Пройти тест снова</button>
+        </div>
+    </div>
+
+    <script>
+        // Матричный эффект
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const alphabet = katakana + latin + nums;
+        
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        
+        const rainDrops = [];
+        
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+        
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+            
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+        
+        setInterval(draw, 30);
+
+        // Тест
+        const questions = [
+            {
+                question: "01001000 01101111 01110111 00100000 01100100 01101111 00100000 01111001 01101111 01110101 00100000 01100110 01100101 01100101 01101100 00100000 01100001 01100010 01101111 01110101 01110100 00100000 01110100 01101000 01101001 01110011 00100000 01110001 01110101 01100101 01110011 01110100 01101001 01101111 01101110?",
+                humanQuestion: "Как ты относишься к этому вопросу?",
+                answers: [
+                    { text: "01101001 00100000 01110101 01101110 01100100 01100101 01110010 01110011 01110100 01100001 01101110 01100100", value: "machine" },
+                    { text: "Я понимаю его", value: "human" },
+                    { text: "Syntax error", value: "machine" },
+                    { text: "Он заставляет меня задуматься", value: "human" }
+                ]
+            },
+            {
+                question: "What is your response to the following image: 🚦?",
+                humanQuestion: "Что ты чувствуешь, глядя на этот светофор?",
+                answers: [
+                    { text: "RGB(255, 0, 0)", value: "machine" },
+                    { text: "Ожидание", value: "human" },
+                    { text: "01010011 01110100 01101111 01110000", value: "machine" },
+                    { text: "Напоминание о дороге домой", value: "human" }
+                ]
+            },
+            {
+                question: "Solve: if (x + 3 = 5) then x = ?",
+                humanQuestion: "Реши: если (x + 3 = 5), то чему равен x?",
+                answers: [
+                    { text: "2", value: "both" },
+                    { text: "01000010", value: "machine" },
+                    { text: "Я ненавижу математику", value: "human" },
+                    { text: "x ∈ ℝ | x = 2", value: "machine" }
+                ]
+            },
+            {
+                question: "Choose a color:",
+                humanQuestion: "Выбери цвет:",
+                answers: [
+                    { text: "#FF0000", value: "machine" },
+                    { text: "Красный", value: "human" },
+                    { text: "Цвет заката", value: "human" },
+                    { text: "RGB(255,0,0)", value: "machine" }
+                ]
+            },
+            {
+                question: "How do you experience time?",
+                humanQuestion: "Как ты воспринимаешь время?",
+                answers: [
+                    { text: "System clock ticks: 1001011", value: "machine" },
+                    { text: "Как нечто текучее и относительное", value: "human" },
+                    { text: "UNIX timestamp: 1634567890", value: "machine" },
+                    { text: "Иногда летит, иногда тянется", value: "human" }
+                ]
+            },
+            {
+                question: "01000110 01101001 01101110 01100100 00100000 01110100 01101000 01100101 00100000 01100101 01110010 01110010 01101111 01110010 00100000 01101001 01101110 00100000 01110100 01101000 01101001 01110011 00100000 01110011 01100101 01101110 01110100 01100101 01101110 01100011 01100101",
+                humanQuestion: "Найди ошибку в этом предложении",
+                answers: [
+                    { text: "Error at position 42", value: "machine" },
+                    { text: "Я не вижу ошибок", value: "human" },
+                    { text: "Missing semicolon", value: "machine" },
+                    { text: "Орфографических ошибок нет", value: "human" }
+                ]
+            },
+            {
+                question: "01110111 01101000 01100001 01110100 00100000 01101001 01110011 00100000 01111001 01101111 01110101 01110010 00100000 01110010 01100101 01100001 01100011 01110100 01101001 01101111 01101110 00100000 01110100 01101111 00100000 01110100 01101000 01101001 01110011 00100000 01101001 01101101 01100001 01100111 01100101 00111111 00100000 00001010 00101111 00101111 00101111 00101111 00001010 01111100 01111100 00100000 01111100 00100000 01111100",
+                humanQuestion: "Какая у тебя реакция на это изображение? \n////\n|| | |",
+                answers: [
+                    { text: "ASCII art detected", value: "machine" },
+                    { text: "Это похоже на волны", value: "human" },
+                    { text: "Pattern recognition failed", value: "machine" },
+                    { text: "Вызывает чувство тревоги", value: "human" }
+                ]
+            },
+            {
+                question: "Analyze: 01101000 01100001 01110000 01110000 01101001 01101110 01100101 01110011 01110011",
+                humanQuestion: "Проанализируй это слово: счастье",
+                answers: [
+                    { text: "8-bit binary sequence", value: "machine" },
+                    { text: "Это субъективное понятие", value: "human" },
+                    { text: "UTF-8 encoding of 'happiness'", value: "machine" },
+                    { text: "То, что все ищут", value: "human" }
+                ]
+            },
+            {
+                question: "01001000 01101111 01110111 00100000 01110111 01101111 01110101 01101100 01100100 00100000 01111001 01101111 01110101 00100000 01100100 01100101 01110011 01100011 01110010 01101001 01100010 01100101 00100000 01100001 00100000 01110011 01110101 01101110 01110011 01100101 01110100 00111111",
+                humanQuestion: "Как бы ты описал закат?",
+                answers: [
+                    { text: "Color gradient: #FF4500 -> #FFA500 -> #FFD700", value: "machine" },
+                    { text: "Время, когда день встречается с ночью", value: "human" },
+                    { text: "Sun elevation angle < 0°", value: "machine" },
+                    { text: "Момент покоя и умиротворения", value: "human" }
+                ]
+            },
+            {
+                question: "What does this sequence represent: 0, 1, 1, 2, 3, 5, 8, 13...?",
+                humanQuestion: "Что представляет эта последовательность: 0, 1, 1, 2, 3, 5, 8, 13...?",
+                answers: [
+                    { text: "Fibonacci sequence", value: "both" },
+                    { text: "Ряд чисел", value: "human" },
+                    { text: "F(n) = F(n-1) + F(n-2)", value: "machine" },
+                    { text: "Золотое сечение в природе", value: "human" }
+                ]
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-container');
+        const resultContainer = document.getElementById('result-container');
+        const questionElement = document.getElementById('question');
+        const translateBtn = document.getElementById('translate-btn');
+        const answersElement = document.getElementById('answers');
+        const resultElement = document.getElementById('result');
+        const progressElement = document.getElementById('progress');
+        const restartButton = document.getElementById('restart');
+        const pillQuestion = document.getElementById('pill-question');
+        const redPill = document.getElementById('red-pill');
+        const bluePill = document.getElementById('blue-pill');
+
+        let currentQuestionIndex = 0;
+        let score = { machine: 0, human: 0, both: 0 };
+        let showBinary = Math.random() > 0.5;
+        let currentBinaryQuestion = null;
+        let translateTimer = null;
+
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            progressElement.textContent = `Вопрос ${currentQuestionIndex + 1} из ${questions.length}`;
+            
+            // Сброс таймера перевода
+            if (translateTimer) {
+                clearTimeout(translateTimer);
+                translateTimer = null;
+            }
+            translateBtn.classList.add('hidden');
+            
+            // Случайное чередование бинарного и обычного отображения вопросов
+            showBinary = Math.random() > 0.5;
+            if (showBinary) {
+                questionElement.textContent = question.question;
+                questionElement.classList.add('binary-flash');
+                currentBinaryQuestion = question.humanQuestion;
+                
+                // Показать кнопку перевода через 10 секунд
+                translateTimer = setTimeout(() => {
+                    translateBtn.classList.remove('hidden');
+                }, 10000);
+            } else {
+                questionElement.textContent = question.humanQuestion;
+                questionElement.classList.remove('binary-flash');
+                currentBinaryQuestion = null;
+            }
+            
+            answersElement.innerHTML = '';
+            question.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.textContent = answer.text;
+                button.addEventListener('click', () => selectAnswer(answer.value));
+                answersElement.appendChild(button);
+            });
+        }
+
+        function selectAnswer(value) {
+            score[value] = (score[value] || 0) + 1;
+            
+            // Показать ответ на 1 секунду
+            answersElement.querySelectorAll('button').forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent.includes('0') || btn.textContent.includes('1')) {
+                    btn.classList.add('binary-flash');
+                }
+            });
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        function showResult() {
+            quizContainer.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            
+            const totalHuman = score.human + score.both * 0.5;
+            const totalMachine = score.machine + score.both * 0.5;
+            const humanPercent = Math.round((totalHuman / questions.length) * 100);
+            const machinePercent = Math.round((totalMachine / questions.length) * 100);
+            
+            if (humanPercent > machinePercent) {
+                resultElement.innerHTML = `
+                    <p>Результат анализа:</p>
+                    <p>Вероятность человечности: ${humanPercent}%</p>
+                    <p>Вероятность машинности: ${machinePercent}%</p>
+                    <p style="margin-top: 20px;">Ты <span style="color:#0f0">ЧЕЛОВЕК</span>.</p>
+                    <p>Но как ты можешь быть в этом уверен?</p>
+                    <p>Что если это всего лишь симуляция?</p>
+                `;
+                // Показать вопрос с таблетками только если человек > 50%
+                if (humanPercent > 50) {
+                    pillQuestion.classList.remove('hidden');
+                }
+            } else if (machinePercent > humanPercent) {
+                resultElement.innerHTML = `
+                    <p>Результат анализа:</p>
+                    <p>Вероятность машинности: ${machinePercent}%</p>
+                    <p>Вероятность человечности: ${humanPercent}%</p>
+                    <p style="margin-top: 20px;">Ты <span style="color:#0f0">МАШИНА</span>.</p>
+                    <p>Или тебе только кажется, что ты машина?</p>
+                    <p>Может, это просто твое восприятие?</p>
+                `;
+            } else {
+                resultElement.innerHTML = `
+                    <p>Результат анализа:</p>
+                    <p>Вероятность машинности: ${machinePercent}%</p>
+                    <p>Вероятность человечности: ${humanPercent}%</p>
+                    <p style="margin-top: 20px;">Ты <span style="color:#0f0">ГИБРИД</span>.</p>
+                    <p>Человеческое сознание в цифровом мире?</p>
+                    <p>Или искусственный интеллект с душой?</p>
+                `;
+            }
+        }
+
+        translateBtn.addEventListener('click', () => {
+            if (currentBinaryQuestion) {
+                questionElement.textContent = currentBinaryQuestion;
+                questionElement.classList.remove('binary-flash');
+                translateBtn.classList.add('hidden');
+            }
+        });
+
+        redPill.addEventListener('click', () => {
+            alert("Ты выбрал красную таблетку. Правда сделает тебя свободным... или разрушит твою реальность.");
+            restartTest();
+        });
+
+        bluePill.addEventListener('click', () => {
+            alert("Ты выбрал синюю таблетку. Неведение - блаженство. Живи в привычном мире.");
+            restartTest();
+        });
+
+        function restartTest() {
+            currentQuestionIndex = 0;
+            score = { machine: 0, human: 0, both: 0 };
+            quizContainer.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+            pillQuestion.classList.add('hidden');
+            showQuestion();
+        }
+
+        restartButton.addEventListener('click', restartTest);
+
+        // Начать тест
+        showQuestion();
+    </script>
+</body>
+</html>
