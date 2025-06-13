@@ -1,0 +1,15 @@
+.answer {
+  padding: 14px 20px;
+  margin: 10px 0;
+  background-color: #1d1d1d;
+  border: 1px solid #333;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: white;
+}
+
+.answer:hover {
+  background-color: #333;
+  border-color: #666;
+}
