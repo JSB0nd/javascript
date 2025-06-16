@@ -133,11 +133,31 @@ const questions = [
 // доступ к элементам HTML
 
 const questionElement = document.getElementById('question');
-const testForm = document.getElementById('test-form');
+const answersElement = document.getElementById('answers');
 const resultsElement = document.getElementById('result-screen');
+const resultTextContainer = resultsElement.querySelector('.result-text');
+const startButton = document.getElementById('start-button');
+const restartButton = document.getElementById('restart');
+const startScreen = document.querySelector('.start-screen');
+const testWrapper = document.getElementById('test-screen');
+
 
 let currentQuestionIndex = 0;
 let score = 0;
+
+// начало теста
+
+startButton.addEventListener('click', () => {
+  startScreen.classList.add('hidden');
+  testWrapper.classList.remove('hidden');
+  showQuestion();
+});
+
+// способ перезапустить
+
+restartButton.addEventListener('click', () => {
+  location.reload
+})
 
 // функция для отображения вопроса
 
@@ -149,53 +169,56 @@ function showQuestion() {
     testForm.innerHTML = '';
 
     // создать радио-кнопки для каждого варианта ответа
-    for (const letter in currentQuestion.answers) {
-        const label = document.createElement('label');
-        label.textContent = currentQuestion.answers[letter];
 
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.name = 'answer';
-        input.value = letter;
+    for (const key in currentQuestion.answers) {
+    const answer = currentQuestion.answers[key];
 
-        label.appendChild(input);
+    const label = document.createElement('label');
+    label.classList.add('answer-option');
 
-        testForm.appendChild(label);
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'answer';
+    input.value = key;
 
+    label.appendChild(input);
+    label.append(` ${answer.text}`);
+
+    answersElement.appendChild(label);
+  }
+
+  // переход к следующему вопросу и подсчет очков
+  
+  const nextButton = document.createElement('button');
+  nextButton.textContent = 'Далее';
+  nextButton.classList.add('button');
+  answersElement.appendChild(nextButton);
+
+  nextButton.addEventListener('click', () => {
+    const selected = document.querySelector('input[name="answer"]:checked');
+    if (!selected) return;
+
+    const selectedScore = currentQuestion.answers[selected.value].score;
+    score += selectedScore;
+
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) {
+      showQuestion();
+    } else {
+      showResult();
     }
-
-    // обработка отправки формы
-    testForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // получить выбранный ответ
-        const selectedAnswer = document.querySelector('input[name='answer']:checked').value;
-
-        // проверка ответа
-        const currentQuestion = questions[currentQuestionIndex];
-        if (selectedAnswer === currentQuestion.correctAnswer) {
-            score++;
-            resultsElement.textContent = 'Правильно';
-        }
-
-        // перейти к следующему вопросу
-        currentQuestionIndex++;
-
-        if (currentQuestionIndex < questions.length) {
-            showQuestion();
-        } else {
-            resultsElement.textContent = 'Тест завершен.'
-        }
-        
-    });
+  });
 };
 
-showQuestion();
+// подсчет и вывод результатов
 
-// подсчет результатов
+function showResult() {
+  testWrapper.classList.add('hidden');
+  resultsElement.classList.remove('hidden');
 
-const humanityPercent = Math.round((score / questions.length) * 100);
-const machinePercent = 100 - humanityPercent;
+  const humanityPercent = Math.round((score / questions.length) * 100);
+  const machinePercent = 100 - humanityPercent;
 
 // вывод результатов
 
@@ -206,4 +229,7 @@ if (score >= (questions.length / 2)) {
 } else {
     resultText = `Ты машина на ${machinePercent}%. Человеченость: ${humanityPercent}%ю`ж
 }
-}
+
+resultTextContainer.innerHTML = `<p>${resultText}</p>`;
+  restartButton.textContent = 'Пройти снова';
+};
