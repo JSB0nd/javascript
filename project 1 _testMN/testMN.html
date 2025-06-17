@@ -3,43 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест</title>
+    <title>тест</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <header class="header" id="header">
-        <h1 class="title">Название теста</h1>
+        <h1 class="title">...</h1>
     </header>
     <main class="container">
         <div class="start-screen">
             <p>
-                Описание теста
+                Этот тест не определяет, кто ты. Он лишь показывает, как ты смотришь на реальность.
+                Выбери — и узнай, насколько в тебе осталось человечности.
             </p>
             <button id="start-button" class="button">
                 Начать
             </button>
         </div>
+        <div class="hidden" id="name-screen">
+            <input type="text" id="name-input" placeholder="Напиши своё имя">
+            <button id="name-submit" class="button">></button>
+        </div>
         <div id="test-screen" class="test-wrapper hidden">
+            <div class="timer" id="timer">Осталось: 10</div>
             <div class="question" id="question">
                 
             </div>
-            <div class="answers" id="answers">
+            <div class="answer" id="answers">
 
             </div>
         </div>
         <div id="result-screen"  class="result hidden">
             <div class="result-text">
-                <p>Ваш результат</p>
-            </div>
 
+            </div>
         </div>
-        <button id="restart" class="button"></button>
+        <button id="restart" class="button hidden"></button>
     </main>
-    <footer>
+    <footer class="footer">
         <div class="progress">
-            
+            <div class="progress-fill" id="progress-fill"></div>
         </div>
     </footer>
-    <script src="./js/testMN.js"></script>
+    <script src="./javascript.js"></script>
 </body>
 </html>
