@@ -11,42 +11,45 @@
 </head>
 <body>
     <header class="header" id="header">
-        <h1 class="title">...</h1>
+        <h1 class="title" aria-label="Название">...</h1>
     </header>
     <main class="container">
-        <div class="start-screen">
-            <p>
+        <section class="start-screen">
+            <p aria-label="Описание">
                 Этот тест не определяет, кто ты. Он лишь показывает, как ты смотришь на реальность.
                 Выбери — и узнай, насколько в тебе осталось человечности.
             </p>
             <button id="start-button" class="button">
                 Начать
             </button>
-        </div>
-        <div class="hidden" id="name-screen">
+        </section>
+        <section class="hidden" id="name-screen">
             <input type="text" id="name-input" placeholder="Напиши своё имя">
-            <button id="name-submit" class="button">></button>
-        </div>
-        <div id="test-screen" class="test-wrapper hidden">
-            <div class="timer" id="timer">Осталось: 10</div>
-            <div class="question" id="question">
+            <button id="name-submit" class="button" aria-label="Подтвердить имя">></button>
+        </section>
+        <section id="test-screen" class="test-wrapper hidden">
+            <article class="timer" id="timer" aria-label="Таймер вопроса">Осталось: 30</article>
+            <article class="question" id="question" aria-label="Вопрос">
                 
-            </div>
-            <div class="answer" id="answers">
+            </article>
+            <article class="answer" id="answers" aria-label="Варианты ответов">
 
-            </div>
-        </div>
-        <div id="result-screen"  class="result hidden">
-            <div class="result-text">
+            </article>
+        </section>
+        <section id="result-screen"  class="result hidden" aria-label="Результаты">
+            <article class="result-text">
 
-            </div>
-        </div>
-        <button id="restart" class="button hidden"></button>
+            </article>
+            <article class="result-last">
+
+            </article>
+        </section>
+        <button id="restart" class="button hidden retart" aria-label="Начать заново"></button>
     </main>
     <footer class="footer">
-        <div class="progress">
-            <div class="progress-fill" id="progress-fill"></div>
-        </div>
+        <section class="progress">
+            <article class="progress-fill" id="progress-fill"></article>
+        </section>
     </footer>
     <script src="./javascript.js"></script>
 </body>

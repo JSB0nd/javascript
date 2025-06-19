@@ -144,6 +144,7 @@ const progressFill = document.getElementById('progress-fill');
 const nameScreen = document.getElementById('name-screen');
 const nameInput = document.getElementById('name-input');
 const nameSubmit = document.getElementById('name-submit');
+const resultLast = resultsElement.querySelector('.result-last')
 
 
 // подсчет вопросов и очков для подсчёта человоечности
@@ -176,9 +177,19 @@ function submitName() {
         nameScreen.classList.add('hidden');
         testWrapper.classList.remove('hidden');
         showQuestion()
+    } else {
+        return
     }
 }
 
+// сохранение результата
+
+const lastUser = JSON.parse(localStorage.getItem('user'));
+
+if (lastUser) {
+    resultLast.className = 'result-last'; // сброс классов
+    resultLast.innerHTML = `<p>Прошлый результат: ${lastUser.name} - ${lastUser.text}</p>`;console.log(lastUser);
+}
 // перезапустить
 
 restartButton.addEventListener('click', () => {
@@ -200,7 +211,7 @@ function showQuestion() {
 
     // запустить таймер
 
-    timeLeft = 10; // секунды таймера
+    timeLeft = 30; // секунды таймера
     document.getElementById('timer').textContent = `Осталось: ${timeLeft}`;
 
     clearInterval(timerInterval);
@@ -304,6 +315,18 @@ function showResult() {
     <p>${resultText}</p>
     <p>${resultDesc}</p>
     `;
+
+    // сохранение и вывод прошлого результата
+
+    const userResults = {
+        name: name,
+        text: resultText
+    };
+
+    localStorage.setItem('user', JSON.stringify(userResults));
+    console.log(userResults);
+    
+
     progressFill.style.width = `100%`;
     restartButton.textContent = 'Пройти снова';
 }
