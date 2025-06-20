@@ -151,6 +151,7 @@ const resultLast = resultsElement.querySelector('.result-last')
 
 let currentQuestionIndex = 0;
 let score = 0;
+let isWaiting = false; // ожидание во время таймаута
 
 // начать и первый вопрос
 
@@ -203,7 +204,7 @@ let timeLeft = 10;
 function showQuestion() {
     const currentQuestion = questions[currentQuestionIndex];
     questionElement.textContent = currentQuestion.question;
-    progressFill.style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
+    progressFill.style.width = `${(currentQuestionIndex / questions.length) * 100}%`; // прогресс-бар
 
     // очистить форму
 
@@ -234,6 +235,8 @@ function showQuestion() {
         div.textContent = answer.text;
 
         div.addEventListener('click', () => {
+            if (isWaiting) return; // блокировка нажатий
+            isWaiting = true; // установка блокировки
             clearInterval(timerInterval);
             handleAnswer(answer.score);
         });
@@ -265,6 +268,7 @@ function handleAnswer(scoreForAnswer) {
             setTimeout(() => {
                 currentQuestionIndex++;
                 if (currentQuestionIndex < questions.length) {
+                    isWaiting = false; // сброс блокировки нажатий
                     showQuestion();
                 } else {
                     showResult();

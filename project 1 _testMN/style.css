@@ -99,6 +99,7 @@ body {
 .question {
     font-size: 1.2rem;
     margin-bottom: 1rem;
+    /* min-height: 2rem; */
 }
 
 .answer {
@@ -186,7 +187,7 @@ body {
 
 /* .restart {
     display: inline-block;
-    margin: 1rem auto;
+    margin: 2rem auto;
     padding: 20px 40 px;
     font-size: 1rem;
 
