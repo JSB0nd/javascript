@@ -85,11 +85,5 @@ deepDeepCopy.b.c = 888;
 console.log(deepDeepCopy.b.c); // 888
 console.log(deepObj.b.c); // 2
 
-
-sayHiArray.sayHi();
-
-const sayHiArrayDeep = deepCopy(sayHiArray); // Hello, Alice!
-sayHiArrayDeep.sayHi = () => console.log('Hello, Leonid!');
-
-sayHiArrayDeep.sayHi(); // Hello, Leonid!
+// функция deepCopy() позволяет совершать глубокое копирование, но функции остаются ссылочными
 
