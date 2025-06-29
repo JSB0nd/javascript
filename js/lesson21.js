@@ -4,7 +4,7 @@ const numbers = [4, 9, 16, 25, 36];
 const squareRoots = [];
 for (let i = 0; i < numbers.length; i++) {
     squareRoots.push(numbers[i] ** (1/2));
-}; // решение без hof
+} // решение без hof
 
 console.log(squareRoots); // [ 2, 3, 4, 5, 6 ]
 
