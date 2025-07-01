@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>События 🎆</title>
+    <title>this, контекст 🤔</title>
     <style>
         h1 {
             font-size: 100px;
@@ -19,56 +19,11 @@
             border: 3px solid black;
             font-family: "Apple Symbols", sans-serif;
         }
-
-        .lesson-mission-wrapper {
-            border: 2px solid black;
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-width: 80%;
-        }
-
-        .lesson-mission-text {
-            padding: 20px 20px;
-            font-size: 1.4em;
-        }
-
-        .green {
-            color: green;
-        }
-
-        .red {
-            color: red;
-        }
-
-        .night-theme {
-            background: #070f1e;
-
-            * {
-                color: lightcyan;
-                background: #0e1627;
-            }
-        }
     </style>
 </head>
 <body id="body">
     <h1 id="main-title">JavaScript</h1>
-    <div class="lesson-mission-wrapper">
-        <div class="lesson-mission-text">
-            <p id="p1">1. Назначь для кнопки обработчик события <button id="button-click" class="green">click</button>, который будет изменять текст этой кнопки при нажатии;</p>
-            <p id="p2">2. Назначь для любого элемента обработчик события mouseover, который будет изменять размер элемента при наведении;</p>
-            <p id="p3">3. Назначь для <input id="input-p3" type="text" placeholder="инпута"> обработчик события keyup, который будет выводить отпущенную клавишу в консоль;</p>
-            <p id="p4">4. Создай
-                <form id="form" action="submit">
-                    <input type="text" placeholder="форму">
-                    <input type="submit">
-                </form>
-            и добавь обработчик события submit, который будет показывать сообщение об успешной отправке;</p>
-            <p id="p5">5. Пусть на странице есть кнопка с надписью <button id="button-theme">'Изменить тему'</button>, которая позволяет переключать тему страницы. Например, по умолчанию тема светлая: задний фон - белый, текст - черный. Нажимаем на кнопку -> тема меняется на темную: цвет фона - черный, текст - белый. Еще раз нажимаем на кнопку -> тема снова светлая и т. д.</p>
-        </div>
-    </div>
-    <script src="js/lesson16.js">
+    <script src="js/lesson22.js">
 
     </script>
 </body>
