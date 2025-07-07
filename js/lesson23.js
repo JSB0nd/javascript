@@ -1,49 +1,76 @@
-// 1. Напиши функцию, которая создает локальную переменную и выводит её значение
-// Попробуй получить доступ к этой переменной вне функции и объясни, что произошло;
+// 1. Напиши функцию, которая создает и возвращает другую функцию.
+// Внутренняя функция должна иметь доступ к переменной,
+// объявленной во внешней функции, даже после завершения внешней функции;
 
-const global = 'I am global'
+function counter() {
+    let count = 0;
 
-console.log(global) // I am global
-console.log(this.global) // undefined
-
-const showGlobal = () => {
-    const local = 'I am local';
-    console.log(`${local} in showGlobal`)
+    return function () {
+        count++;
+        return count;
+    }
 }
 
-showGlobal() // I am local in showGlobal
-console.log(local) // Uncaught ReferenceError: local is not defined
+let counter1 = counter();
+console.log(counter1()); // 1
+console.log(counter1()); // 2
 
-// глобал - глобальная зона видимости window, доступны для любой функции при любом вызовые
-// local - локальная, а точнее функциональная зона видимости, доступна только внутри функции
-// Uncaught ReferenceError потому что local недоступна в глобальной зоне видимости
+// 2. Реализуй пример с несколькими вложенными функциями,
+// где каждая функция использует переменные из своего собственного и внешних лексических окружений;
 
-// 2. Создай блок с условием и объяви переменную внутри него
-// Попробуй получить доступ к этой переменной вне блока и объясни результат;
+function greeting() {
+    const hello = 'Hello, ';
+    console.log(hello);
 
-if (true) {
-    const block = 'It is block'
-    console.log(block) // It is block
+    function nameIs() {
+        const myName = 'my name is ';
+        console.log(hello + myName);
+
+        function innerName() {
+            const firstName = 'Leonid';
+            console.log(hello + myName + firstName);
+        }
+
+        innerName(); // Hello, my name is Leonid
+
+        // console.log(hello + myName + firstName) // Uncaught ReferenceError: firstName is not defined
+    }
+
+    nameIs(); // Hello, my name
+
+    // console.log(hello + myName + firstName) // Uncaught ReferenceError: myName is not defined
 }
 
-console.log(block) // lesson23.js:29 Uncaught ReferenceError: block is not defined
+greeting(); ///Hello,
+// каждая функция использует переменные из своего и внешнего лексического окружения
+// обращение к переменным вложенным в функции приводит к Uncaught ReferenceError
 
-// аналогично, block это блочная область видимости, то есть то что внутри {}
-// вызов из глобальной области приводит к Uncaught ReferenceError, нет доступ к блочной области видимости
+// 3*. Тебе нужно написать функцию для вычисления чисел Фибоначчи с использованием цикла и кэширования.
+//     Числа Фибоначчи — это последовательность, в которой каждое число является суммой двух предыдущих чисел. Кэширование необходимо для того, чтобы избежать повторных вычислений одних и тех же значений, что значительно ускорит работу функции. Кэширование реализуем с помощью только что изученных замыканий :)
+// Функция должна возвращать другую функцию, которая принимает число `n` и возвращает `n`-е число Фибоначчи.
+//     Внутренняя функция должна использовать кэширование для хранения уже вычисленных значений чисел Фибоначчи.
+//     Реализация должна быть через цикл, НЕ через рекурсию!
+//     Пример:
 
-// 3. Изучи, что такое hoisting в JavaScript и расскажи своими словами
-//  что это такое и какие проблемы с ним связаны. Приведи примеры :)
+// function fibonacci(n) {
+//     if (n < 0) return null;
+//     if (n === 0) return 0;
+//     if (n === 1) return 1;
+//
+//     const cache = [0, 1];
+//
+//     for (let i = 2; i <= n; i++) {
+//         cache[i] = cache[i - 1] + cache[i - 2];
+//     }
+//
+//     return cache[n];
+// }
+//
+// console.log(fibonacci(10)); // 55
 
-console.log('Пример ' + x + y + z)
-const x = 1 // Uncaught ReferenceError: Cannot access 'x' before initialization
-let y = 2 // Uncaught ReferenceError: Cannot access 'y' before initialization
-var z = 3 // Пример undefined.
-// данный пример показывает что const и let не поднимаются (hoisting), то есть нельзя использовать
-// до объявления, var возможно, только до момента присваивания будет значени undefined
-// но нужно использовать const и let, так как у них блочная видимость, исключаются неожиданные результаты var 
-
-sayHello() // Hello, World!
-
-function sayHello() {
-    console.log('Hello, World!')
-} // декларированные функции всплывают, их можно вызвать до момента объявления
+// const fibonacci = createFibonacciCalculator();
+// console.log(fibonacci(0)); // 0
+// console.log(fibonacci(1)); // 1
+// console.log(fibonacci(5)); // 5
+// console.log(fibonacci(10)); // 55
+// // console.log(fibonacci(50)); // 12586269025 (очень быстро за счет кэширования)

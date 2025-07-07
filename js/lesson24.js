@@ -1,76 +1,50 @@
-// 1. Напиши функцию, которая создает и возвращает другую функцию.
-// Внутренняя функция должна иметь доступ к переменной,
-// объявленной во внешней функции, даже после завершения внешней функции;
+// 1. Напиши рекурсивную функцию для вычисления суммы всех элементов в массиве;
 
-function counter() {
-    let count = 0;
+const array = [ 1, 2, 3, 4, 5];
 
-    return function () {
-        count++;
-        return count;
-    }
+const sum = (array, index = 0) => {
+    if (index >= array.length) return 0; // базовый случай
+
+    return array[index] + sum (array, (index + 1)); // рекурсивный случай
 }
 
-let counter1 = counter();
-console.log(counter1()); // 1
-console.log(counter1()); // 2
+console.log(sum(array)); // 15
 
-// 2. Реализуй пример с несколькими вложенными функциями,
-// где каждая функция использует переменные из своего собственного и внешних лексических окружений;
+// 2. Реализуй функцию для нахождения максимального элемента в массиве с использованием рекурсии;
 
-function greeting() {
-    const hello = 'Hello, ';
-    console.log(hello);
+const maxArray = (array, index = 0) => {
+    if (index = array.length - 1) return array[index]; // базовый случай
 
-    function nameIs() {
-        const myName = 'my name is ';
-        console.log(hello + myName);
+    const maxOfRest = maxArray(array, index + 1);
 
-        function innerName() {
-            const firstName = 'Leonid';
-            console.log(hello + myName + firstName);
-        }
-
-        innerName(); // Hello, my name is Leonid
-
-        // console.log(hello + myName + firstName) // Uncaught ReferenceError: firstName is not defined
-    }
-
-    nameIs(); // Hello, my name
-
-    // console.log(hello + myName + firstName) // Uncaught ReferenceError: myName is not defined
+    return array[index] > maxArray ? array[index] : maxOfRest;
 }
 
-greeting(); ///Hello,
-// каждая функция использует переменные из своего и внешнего лексического окружения
-// обращение к переменным вложенным в функции приводит к Uncaught ReferenceError
+console.log(maxArray(array)); // 5
 
-// 3*. Тебе нужно написать функцию для вычисления чисел Фибоначчи с использованием цикла и кэширования.
-//     Числа Фибоначчи — это последовательность, в которой каждое число является суммой двух предыдущих чисел. Кэширование необходимо для того, чтобы избежать повторных вычислений одних и тех же значений, что значительно ускорит работу функции. Кэширование реализуем с помощью только что изученных замыканий :)
-// Функция должна возвращать другую функцию, которая принимает число `n` и возвращает `n`-е число Фибоначчи.
-//     Внутренняя функция должна использовать кэширование для хранения уже вычисленных значений чисел Фибоначчи.
-//     Реализация должна быть через цикл, НЕ через рекурсию!
-//     Пример:
+// 3. Помнишь функцию глубоко копирования объектов? Там использовалась рекурсия. Вернись к ней и
+// проанализируй её еще раз, чтобы усвоить информацию ещё лучше! Это задание на самостоятельную работу - ничего присылать не нужно!
 
-// function fibonacci(n) {
-//     if (n < 0) return null;
-//     if (n === 0) return 0;
-//     if (n === 1) return 1;
-//
-//     const cache = [0, 1];
-//
-//     for (let i = 2; i <= n; i++) {
-//         cache[i] = cache[i - 1] + cache[i - 2];
-//     }
-//
-//     return cache[n];
-// }
-//
-// console.log(fibonacci(10)); // 55
+// copy[key] = deepCopy(obj[key]); // рекурсивное копирование в новый объект, который был создан изначально
+// в лексической области при вызове функции
+//  if (obj === null || typeof obj !== "object") // запускает саму себя пока удовлетворяет условию
 
-// const fibonacci = createFibonacciCalculator();
-// console.log(fibonacci(0)); // 0
-// console.log(fibonacci(1)); // 1
-// console.log(fibonacci(5)); // 5
-// console.log(fibonacci(10)); // 55
-// // console.log(fibonacci(50)); // 12586269025 (очень быстро за счет кэширования)
+// 4. А вот теперь нужно реализовать функцию для вычисления чисел Фибоначчи с кэшированием через рекурсию!
+// Требования те же, что и в предыдущем уроке.
+
+function fibonacci(n, cache = {}) {
+    if (n < 0) return null;
+    if (n === 0) return 0;
+    if (n === 1) return 1;
+
+    if (cache[n] !== undefined) {
+        return cache[n];
+    }
+
+    cache[n] = fibonacci(n - 1, cache) + fibonacci(n - 2, cache);
+
+    return cache[n];
+}
+
+console.log(fibonacci(11)); // 89
+console.log(fibonacci(20)) // 6765
