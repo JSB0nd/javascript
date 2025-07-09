@@ -13,11 +13,11 @@ console.log(sum(array)); // 15
 // 2. Реализуй функцию для нахождения максимального элемента в массиве с использованием рекурсии;
 
 const maxArray = (array, index = 0) => {
-    if (index = array.length - 1) return array[index]; // базовый случай
+    if (index === array.length - 1) return array[index]; // базовый случай
 
     const maxOfRest = maxArray(array, index + 1);
 
-    return array[index] > maxArray ? array[index] : maxOfRest;
+    return array[index] > maxOfRest ? array[index] : maxOfRest;
 }
 
 console.log(maxArray(array)); // 5
