@@ -11,7 +11,7 @@
 <body>
 <main class="container">
     <div id="start-screen">
-        <h1>МАТРИЦА: ПРОБУЖДЕНИЕ</h1>
+        <h1>ПРОБУЖДЕНИЕ</h1>
         <div id="start-description">
             <p>Вы чувствуете, что что-то не так... Этот мир слишком идеален, чтобы быть настоящим.</p>
             <p>Введите имя и начните своё пробуждение.</p>
@@ -29,23 +29,19 @@
                 <div class="stats-container">
                     <div class="stat">
                         <label>Здоровье:</label>
-                        <progress id="health" value="100" max="100"></progress>
+                        <span id="stat-health">100</span>
                     </div>
                     <div class="stat">
                         <label>Сила:</label>
-                        <span>10</span>
+                        <span id="stat-strength">10</span>
                     </div>
                     <div class="stat">
                         <label>Защита:</label>
-                        <span>5</span>
+                        <span id="stat-defense">5</span>
                     </div>
                     <div class="stat">
-                        <label>Осознанность</label>
-                        <span>0%</span>
-                    </div>
-                    <div class="stat">
-                        <label>Взлом:</label>
-                        <span>0</span>
+                        <label>Осознанность:</label>
+                        <span id="stat-awareness">0</span>
                     </div>
                 </div>
             </div>
@@ -63,7 +59,7 @@
         <div id="location-description">
             <h3 id="location-name">Офис</h3>
             <p id="location-text">
-                Вы в сером офисе. На столе мигает монитор. В углу замечаете кошку, которая проходит дважды.
+                Вы в сером офисе. На столе мигает монитор.
             </p>
         </div>
 
@@ -73,7 +69,11 @@
         </div>
     </div>
 
-
+    <div id="ending-screen" class="hidden">
+        <h2>Игра завершена</h2>
+        <p id="end-message"></p>
+        <button id="restart-button">Играть снова</button>
+    </div>
 </main>
 <script src="javascript.js"></script>
 </body>

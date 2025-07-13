@@ -1,286 +1,283 @@
-// Игровые данные
-const gameData = {
-    player: {
-        name: "Нео",
-        health: 100,
-        strength: 10,
-        defense: 5,
-        awareness: 0,
-        hacking: 0,
-        inventory: ["Мобильник", "Пропуск"]
-    },
-    currentLocation: "office",
-    locations: {
-        office: {
-            name: "Офис",
-            description: `Ваш рабочий кабинет. На столе - компьютер и документы. В углу кошка проходит дважды.`,
-            actions: ["Осмотреть монитор", "Проверить ящик стола", "Выйти в коридор"]
-        },
-        corridor: {
-            name: "Коридор",
-            description: "Длинный пустой коридор с мерцающим светом. Лифт и лестница.",
-            actions: ["Вернуться в офис", "Спуститься в подвал", "Вызвать лифт"]
-        },
-        basement: {
-            name: "Подвал",
-            description: "Темное помещение с серверами. В воздухе пахнет озоном.",
-            actions: ["Осмотреть серверы", "Вернуться в коридор"]
-        },
-        whiteRoom: {
-            name: "Белая комната",
-            description: "Пустое белое пространство. Перед вами женщина с вазой.",
-            actions: ["Поговорить с Оракулом", "Вернуться в офис"]
-        },
-        metro: {
-            name: "Метро",
-            description: "Пустая станция. Поезд стоит без машиниста. На табло вместо цифр - символы кода.",
-            actions: ["Сесть в поезд", "Осмотреть тоннель", "Вернуться в коридор"]
-        },
-        serverRoom: {
-            name: "Серверный узел",
-            description: "Комната с зелёным кодом Матрицы в воздухе. Агенты уже знают о вашем присутствии.",
-            actions: ["Взломать систему", "Сразиться с Агентом", "Бежать"]
-        },
-        rooftop: {
-            name: "Крыша",
-            description: "Ветер свистит в ушах. Агент Смит ждёт вас, ухмыляясь.",
-            actions: ["Сразиться с Агентом", "Попытаться убежать"]
-        },
-        subway: {
-            name: "Метро",
-            description: "Пустая станция. В тени видна фигура в чёрном костюме.",
-            actions: ["Подойти ближе", "Спрятаться"]
-        },
-        hideout: {
-            name: "Убежище повстанцев",
-            description: "Подпольная база. Морфеус предлагает вам красную таблетку.",
-            actions: ["Принять таблетку", "Отказаться", "Задать вопрос"]
-        }
-    },
-    log: []
+// игрок
+const player = {
+    name: '',
+    location: 'office',
+    health: 100,
+    strength: 10,
+    defense: 5,
+    awareness: 0,
+    inventory: ['Мобильник'],
+    invitedToHideout: false
 };
 
-// Обработчик нажатия Enter в поле ввода
-document.getElementById('player-name').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        startGame();
-    }
+// локации
+const locations = {
+    office: {
+        name: 'Офис',
+        description: 'Тусклый свет, серые стены, безжизненный монитор. Сотрудники словно клоны. Здесь всё кажется повторяющимся и мёртвым.',
+        actions: ['Проверить монитор', 'Открыть ящик', 'Выйти в коридор', 'Осмотреться']
+    },
+    corridor: {
+        name: 'Коридор',
+        description: 'Бесконечный коридор с одинаковыми дверями и однообразными шагами. Кажется, ты уже был тут. Или это было вчера? Или час назад?',
+        actions: ['Вернуться в офис', 'Подняться по лестнице', 'Осмотреться']
+    },
+    stairs: {
+        name: 'Лестница',
+        description: 'Сырая, серая лестница ведёт вниз. На стенах пятна плесени. Кошка пробегает мимо... и снова.',
+        actions: ['Спуститься в метро', 'Вернуться в коридор', 'Осмотреться']
+    },
+    metro: {
+        name: 'Метро',
+        description: 'Пустая станция, мигающий экран и ощущение, что ты не один. Шум поездов звучит, хотя их давно нет. Мир подвис.',
+        actions: ['Осмотреть тоннель', 'Вернуться на лестницу', 'Осмотреться']
+    },
+    rooftop: {
+        name: 'Крыша',
+        description: 'Серое небо. Город мёртв. Кажется, кто-то наблюдает сверху...',
+        actions: ['Посмотреть вниз', 'Вернуться на лестницу', 'Осмотреться']
+    },
+    hideout: {
+        name: 'Скрытая зона',
+        description: 'Ты в белом пространстве, как будто внутри кода. Морфеус стоит с двумя таблетками.',
+        actions: ['Взять красную таблетку', 'Взять синюю таблетку']
+    },
+};
+
+// dom
+const locationName = document.getElementById('location-name');
+const locationText = document.getElementById('location-text');
+const actionButtons = document.getElementById('action-buttons');
+const startButton = document.getElementById('start-button');
+const startScreen = document.getElementById('start-screen');
+const gameInterface = document.getElementById('game-interface');
+const characterName = document.getElementById('character-name');
+const logPanel = document.getElementById('log-content');
+
+// характеристики
+const statHealth = document.getElementById('stat-health');
+const statStrength = document.getElementById('stat-strength');
+const statDefense = document.getElementById('stat-defense');
+const statAwareness = document.getElementById('stat-awareness');
+const itemsList = document.getElementById('items');
+
+// запуск
+startButton.addEventListener('click', () => {
+    const input = document.getElementById('player-name');
+    const name = input.value.trim();
+    if (!name) return;
+
+    player.name = name;
+    characterName.textContent = name;
+
+    startScreen.classList.add('hidden');
+    gameInterface.classList.remove('hidden');
+
+    updateStats();
+    updateInventory();
+    updateLocation();
 });
 
-// Обработчик клика по кнопке старта
-document.getElementById('start-button').addEventListener('click', startGame);
-
-// Функция начала игры
-function startGame() {
-    const playerName = document.getElementById('player-name').value.trim();
-    gameData.player.name = playerName || "Нео";
-
-    // Скрываем стартовый экран
-    document.getElementById('start-screen').classList.add('hidden');
-    // Показываем игровой интерфейс
-    document.getElementById('game-interface').classList.remove('hidden');
-
-    // Обновляем имя персонажа
-    document.getElementById('character-name').textContent = gameData.player.name;
-
-    // Первая запись в журнал
-    addToLog(`Игра началась. ${gameData.player.name} чувствует, что реальность даёт трещину...`);
-
-    updateUI();
+// обновление характеристик
+function updateStats() {
+    statHealth.textContent = player.health;
+    statStrength.textContent = player.strength;
+    statDefense.textContent = player.defense;
+    statAwareness.textContent = player.awareness;
 }
 
-// Добавление записи в журнал
-function addToLog(message) {
-    gameData.log.push(message);
-    if (gameData.log.length > 50) gameData.log.shift(); // Ограничиваем размер журнала
-    updateUI();
-}
-
-// Обновление интерфейса
-function updateUI() {
-    // Обновляем данные персонажа
-    document.getElementById('health').value = gameData.player.health;
-    document.querySelector('#character-panel .stat:nth-child(2) span').textContent = gameData.player.strength;
-    document.querySelector('#character-panel .stat:nth-child(3) span').textContent = gameData.player.defense;
-    document.querySelector('#character-panel .stat:nth-child(4) span').textContent = gameData.player.awareness + '%';
-    document.querySelector('#character-panel .stat:nth-child(5) span').textContent = gameData.player.hacking;
-
-    // Обновляем инвентарь
-    const itemsContainer = document.getElementById('items');
-    itemsContainer.innerHTML = '';
-    gameData.player.inventory.forEach(item => {
-        const itemElement = document.createElement('div');
-        itemElement.textContent = item;
-        itemsContainer.appendChild(itemElement);
-    });
-
-    // Обновляем текущую локацию
-    const location = gameData.locations[gameData.currentLocation];
-    document.getElementById('location-name').textContent = location.name;
-    document.getElementById('location-text').textContent = location.description;
-
-    // Обновляем доступные действия
-    const actionsContainer = document.getElementById('action-buttons');
-    actionsContainer.innerHTML = '';
-    location.actions.forEach((action, index) => {
-        const button = document.createElement('button');
-        button.textContent = `${index + 1}. ${action}`;
-        button.addEventListener('click', () => handleAction(action));
-        actionsContainer.appendChild(button);
-    });
-
-    // Обновляем журнал
-    const logContainer = document.getElementById('log-content');
-    logContainer.innerHTML = '';
-    gameData.log.forEach(entry => {
-        const entryElement = document.createElement('div');
-        entryElement.textContent = `> ${entry}`;
-        logContainer.appendChild(entryElement);
+// обновление инвентаря
+function updateInventory() {
+    itemsList.innerHTML = '';
+    player.inventory.forEach(item => {
+        const div = document.createElement('div');
+        div.textContent = item;
+        itemsList.appendChild(div);
     });
 }
 
-// Обработка действий
+// обновление локации
+function updateLocation() {
+    const current = locations[player.location];
+
+    locationName.textContent = current.name;
+    locationText.textContent = current.description;
+
+    actionButtons.innerHTML = '';
+    current.actions.forEach(action => {
+        const btn = document.createElement('button');
+        btn.textContent = action;
+        btn.addEventListener('click', () => handleAction(action));
+        actionButtons.appendChild(btn);
+    });
+
+    log(`Вы перешли в локацию: ${locations[player.location].name}`); // добавляем в лог переход
+}
+
+// лог
+function log(message) {
+    const p = document.createElement('p');
+    p.textContent = message;
+    logPanel.appendChild(p);
+    logPanel.scrollTop = logPanel.scrollHeight;
+}
+
+// проверка осознанности
+function checkAwareness() {
+    if (player.awareness >= 50 && !player.invitedToHideout) {
+        player.invitedToHideout = true;
+        log('📞 Мобильник звонит... Это Морфеус.');
+        log('Морфеус: «Ты чувствуешь это, да? Приходи. Я жду тебя в скрытой зоне.»');
+        
+        // откроем новое действие
+        locations[player.location].actions.push('Пойти в скрытую зону');
+    }
+}
+
+// действия
 function handleAction(action) {
-    const location = gameData.locations[gameData.currentLocation];
-
-    switch(action) {
-        case "Осмотреть монитор":
-            gameData.player.awareness += 5;
-            addToLog("Код матрицы мелькает на экране... Осознанность +5%");
+    switch (action) {
+        case 'Проверить монитор':
+            log('Экран мерцает зелёными символами. Это не просто текст...');
+            player.awareness += 5;
+            updateStats();
             break;
 
-        case "Проверить ящик стола":
-            if (!gameData.player.inventory.includes("Пистолет")) {
-                gameData.player.inventory.push("Пистолет");
-                addToLog("Вы нашли пистолет! Кто-то явно готовился к неприятностям.");
+        case 'Открыть ящик':
+            if (!player.inventory.includes('Пистолет')) {
+                log('Вы нашли пистолет! +5 к силе');
+                player.inventory.push('Пистолет');
+                player.strength += 5;
+                updateStats();
+                updateInventory();
             } else {
-                addToLog("Только старые документы и канцелярия.");
+                log('В ящике пусто.');
             }
             break;
 
-        case "Выйти в коридор":
-            gameData.currentLocation = "corridor";
-            addToLog("Вы в коридоре. Лифт и лестница ведут вниз.");
+        case 'Выйти в коридор':
+            player.location = 'corridor';
+            updateLocation();
             break;
 
-        case "Спуститься в подвал":
-            gameData.currentLocation = "basement";
-            addToLog("Вы спустились в подвал. Здесь холодно и тихо.");
+        case 'Вернуться в офис':
+            player.location = 'office';
+            updateLocation();
             break;
 
-        case "Вызвать лифт":
-            if (gameData.player.awareness >= 30) {
-                addToLog("Лифт открывается - внутри никого... слишком подозрительно.");
+        case 'Подняться по лестнице':
+            player.location = 'stairs';
+            updateLocation();
+            break;
+
+        case 'Вернуться в коридор':
+            player.location = 'corridor';
+            updateLocation();
+            break;
+
+        case 'Спуститься в метро':
+            player.location = 'metro';
+            updateLocation();
+            break;
+
+        case 'Вернуться на лестницу':
+            player.location = 'stairs';
+            updateLocation();
+            break;
+
+        case 'Осмотреть тоннель':
+            if (!player.inventory.includes('Пропуск')) {
+                log('Вы нашли Пропуск! +20 к осознанности');
+                player.inventory.push('Пропуск');
+                player.awareness += 20;
+                updateStats();
+                checkAwareness();
+                updateInventory();
             } else {
-                addToLog("Лифт не реагирует. Кажется, отключен.");
+                log('Пропуск уже у вас.');
             }
             break;
 
-        case "Осмотреть серверы":
-            gameData.player.hacking += 10;
-            addToLog("Вы изучаете серверы. Взлом +10");
+        case 'Поймать глюк в отражении':
+            log('Ваше отражение моргнуло, но вы не моргали. +5 к осознанности');
+            player.awareness += 5;
+            updateStats();
+            checkAwareness();
             break;
 
-        case "Поговорить с Оракулом":
-            if (gameData.player.awareness >= 50) {
-                addToLog('Оракул улыбается: "Ты уже знаешь, что делать..."');
+        case 'Посмотреть в мигающую лампу':
+            log('Свет мигает с точностью до секунды. Это не случайность. +5 к осознанности');
+            player.awareness += 5;
+            updateStats();
+            checkAwareness();
+            break;
+
+        case 'Вглядеться в глюк в пространстве':
+            log('Ступени на секунду исчезли, как будто вы находитесь в пустоте. +5 к осознанности');
+            player.awareness += 5;
+            checkAwareness();
+            updateStats();
+            break;
+
+        case 'Замереть и слушать шум':
+            log('Вы слышите странные цифры сквозь шум. Мир сломан. +5 к осознанности');
+            player.awareness += 5;
+            checkAwareness();
+            updateStats();
+            break;
+
+        case 'Осмотреться':
+            if (player.awareness >= 50 && !player.invitedToHideout) {
+                player.invitedToHideout = true;
+                log('📞 Мобильник звонит... Это Морфеус.');
+                log('Морфеус: «Ты чувствуешь это, да? Приходи. Я жду тебя в скрытой зоне.»');
+                const current = locations[player.location];
+                current.actions.push('Пойти в скрытую зону');
+                updateLocation(); // чтобы отобразилась новая кнопка
             } else {
-                addToLog('"Ты еще не готов" - говорит Оракул');
+                log('Ты чувствуешь, что что-то не так... но пока неясно что.');
             }
             break;
 
-        case "Вернуться в офис":
-            gameData.currentLocation = "office";
-            addToLog("Вы вернулись в офис.");
+        case 'Пойти в скрытую зону':
+            player.location = 'hideout';
+            updateLocation();
             break;
 
-        case "Сесть в поезд":
-            if (gameData.player.hacking >= 25) {
-                gameData.currentLocation = "serverRoom";
-                addToLog("Поезд привёз вас к серверному узлу!");
+        case 'Взять красную таблетку':
+            log('Ты выбрал истину. Пробуждение началось.');
+            endGame('Ты проснулся. Добро пожаловать в реальность.');
+            break;
+
+        case 'Взять синюю таблетку':
+            log('Ты выбрал забыть всё. Матрица обнимает тебя вновь.');
+            endGame('Ты заснул. Всё было сном. Или нет?');
+            break;
+
+        case 'Подняться на крышу':
+            player.location = 'rooftop';
+            updateLocation();
+            break;
+
+        case 'Вернуться на лестницу':
+            player.location = 'stairs';
+            updateLocation();
+            break;
+
+        case 'Посмотреть вниз':
+            log('Ты ощущаешь высоту... и нереальность всего вокруг. +5 к осознанности');
+            if (!player.foundGlitches.includes('rooftop')) {
+                player.foundGlitches.push('rooftop');
+                player.awareness += 5;
+                updateStats();
+                checkAwareness();
             } else {
-                addToLog("Поезд не двигается. Нужно найти способ его запустить...");
-            }
-            break;
-
-        case "Осмотреть тоннель":
-            if (!gameData.player.inventory.includes("Вирусный чип")) {
-                gameData.player.inventory.push("Вирусный чип");
-                gameData.player.hacking += 15;
-                addToLog("Вы нашли Вирусный чип! Взлом +15");
-            } else {
-                addToLog("Только мусор и крысы.");
-            }
-            break;
-
-        case "Взломать систему":
-            if (gameData.player.hacking >= 30) {
-                gameData.player.hacking += 20;
-                addToLog("Код Матрицы под вашим контролем! Взлом +20");
-            } else {
-                addToLog("Слишком сложно... Нужно больше навыка взлома.");
-            }
-            break;
-
-        case "Сразиться с Агентом":
-            if (gameData.player.inventory.includes("Пистолет") && gameData.player.strength >= 15) {
-                addToLog("Вы победили Агента! Но он скоро восстановится...");
-                gameData.player.awareness += 20;
-            } else {
-                gameData.player.health -= 30;
-                addToLog("Агент ранил вас! Здоровье -30");
-            }
-            break;
-
-        case "Попытаться убежать":
-            if (gameData.player.awareness >= 40) {
-                addToLog("Вы использовали знание Матрицы для побега!");
-            } else {
-                gameData.player.health -= 15;
-                addToLog("Агент догнал вас! Здоровье -15");
-            }
-            break;
-
-        case "Принять таблетку":
-            gameData.player.inventory.push("Красная таблетка");
-            gameData.player.awareness = 100;
-            addToLog("Мир вокруг начинает распадаться... Вы пробуждаетесь!");
-            break;
-
-        case "Задать вопрос":
-            addToLog('Морфеус: "Матрица — это тюрьма для разума."');
-            break;
-
-
-        case "Сразиться с солдатом":
-            if (gameData.player.strength >= 10) {
-                addToLog("Вы нейтрализовали солдата!");
-                gameData.player.inventory.push("Ключ-карта");
-            } else {
-                gameData.player.health -= 10;
-                addToLog("Солдат ранил вас! Здоровье -10");
-            }
-            break;
-
-        case "Очистить вирус":
-            if (gameData.player.hacking >= 20) {
-                addToLog("Вирус уничтожен! Взлом +5");
-                gameData.player.hacking += 5;
-            } else {
-                gameData.player.defense -= 2;
-                addToLog("Вирус атаковал! Защита -2");
-            }
-            break;
-
-        case "Позвонить по номеру":
-            if (gameData.player.inventory.includes("Мобильник")) {
-                addToLog('Голос в трубке: "Ищи чёрного кота..."');
+                log('Ты уже смотрел вниз. Это ощущение знакомо.');
             }
             break;
 
         default:
-            addToLog("Действие не распознано");
+            log('Ничего не происходит...');
     }
-
-    updateUI();
 }
+

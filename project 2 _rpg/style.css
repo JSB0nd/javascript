@@ -3,7 +3,8 @@ body {
     background: #000000;
     color: #3fef3f;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    font-size: 20px;
 }
 
 h3 {
@@ -11,8 +12,15 @@ h3 {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 880px;
+    width: 100%;
     margin: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    padding: 20px;
 }
 
 #start-screen.hidden,
@@ -21,7 +29,8 @@ h3 {
 }
 
 .char-name {
-    color: #00ff00;
+    color: #62f1ea;
+    text-align: center;
 }
 
 #game-interface {
@@ -41,23 +50,41 @@ h3 {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 20px;
 }
 
+.dark-input, 
+.start #start-button {
+  width: 300px;
+  box-sizing: border-box; /* добавь это */
+}
+
 .dark-input {
-    background-color: #111;
-    color: #0f0;
-    border: 1px solid #0f0;
-    padding: 8px;
-    /*margin: 10px 0;*/
-    width: 250px;
-    outline: none;
+  padding: 12px 10px;
+  border: 1px solid #0f0;
+  background-color: #111;
+  color: #0f0;
+  font-size: 18px;
+  font-family: 'Courier New', monospace;
+  outline: none;
 }
 
 .start #start-button {
-    width: 250px;
-    padding: 8px;
+  padding: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.start #start-button:hover {
+  background-color: #0f0;
+  color: #000;
+}
+
 
 #game-interface {
     display: grid;
@@ -79,6 +106,18 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: start;
+    border: 1px solid #0f0;
+    padding: 10px;
+    background-color: #0a0a0a;
+}
+
+#inventory {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 20px;
 }
 
 #action-panel {
@@ -87,26 +126,29 @@ h3 {
     gap: 20px;
     border: 1px solid #0f0;
     padding: 10px;
+    font-size: 20px;
 }
 
 #action-buttons {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    min-height: 150px;
 }
 
 #location-description {
     grid-column: 1 / span 2;
-    border: 1px solid #0f0;
+    /* border: 1px solid #0f0; */
     padding: 10px;
 }
 
 #log-panel {
     grid-column: 1 / span 2;
+    width: 100%;
     border: 1px solid #0f0;
     padding: 10px;
-    height: 250px;
-    overflow-y: auto;
+    overflow: hidden;
+    background-color: #0a0a0a;
 }
 
 .stat {
@@ -120,9 +162,35 @@ button {
     padding: 5px 10px;
     margin: 5px;
     cursor: pointer;
+    font-size: 18px;
+    font-family: 'Courier New', monospace;
+}
+
+button, .dark-input {
+  transition: all 0.3s ease;
 }
 
 button:hover {
     background-color: #0f0;
     color: #000;
+}
+
+#action-buttons button {
+    width: 100%;
+}
+
+#ending-screen {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #0f0;
+}
+
+#ending-screen.hidden {
+    display: none;
+}
+
+#log-content {
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  height: 250px;
 }
