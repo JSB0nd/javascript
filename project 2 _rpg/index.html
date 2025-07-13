@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Do you wanna play game?</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="container">
+    <div id="start-screen">
+        <h1>МАТРИЦА: ПРОБУЖДЕНИЕ</h1>
+        <div id="start-description">
+            <p>Вы чувствуете, что что-то не так... Этот мир слишком идеален, чтобы быть настоящим.</p>
+            <p>Введите имя и начните своё пробуждение.</p>
+        </div>
+        <div class="start">
+            <input type="text" id="player-name" placeholder="Введите своё имя" class="dark-input">
+            <button id="start-button">Начать игру</button>
+        </div>
+    </div>
+
+    <div id="game-interface" class="hidden">
+        <div id="character-panel">
+            <div class="character">
+                <h2 id="character-name" class="char-name">Нео</h2>
+                <div class="stats-container">
+                    <div class="stat">
+                        <label>Здоровье:</label>
+                        <progress id="health" value="100" max="100"></progress>
+                    </div>
+                    <div class="stat">
+                        <label>Сила:</label>
+                        <span>10</span>
+                    </div>
+                    <div class="stat">
+                        <label>Защита:</label>
+                        <span>5</span>
+                    </div>
+                    <div class="stat">
+                        <label>Осознанность</label>
+                        <span>0%</span>
+                    </div>
+                    <div class="stat">
+                        <label>Взлом:</label>
+                        <span>0</span>
+                    </div>
+                </div>
+            </div>
+            <div id="inventory">
+                <h3>Инвентарь</h3>
+                <div id="items"></div>
+            </div>
+        </div>
+
+        <div id="action-panel">
+            <h3>Действия</h3>
+            <div id="action-buttons"></div>
+        </div>
+
+        <div id="location-description">
+            <h3 id="location-name">Офис</h3>
+            <p id="location-text">
+                Вы в сером офисе. На столе мигает монитор. В углу замечаете кошку, которая проходит дважды.
+            </p>
+        </div>
+
+        <div id="log-panel">
+            <h3>Журнал</h3>
+            <div id="log-content"></div>
+        </div>
+    </div>
+
+
+</main>
+<script src="javascript.js"></script>
+</body>
+</html>
