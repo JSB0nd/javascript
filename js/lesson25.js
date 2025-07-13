@@ -18,6 +18,8 @@ try {
 // 2. Напиши функцию `transfromJSON`, которая принимает строку в формате JSON и возвращает объект.
 // Используй `try...catch` для обработки возможных ошибок при парсинге JSON и выведи сообщение об ошибке в консоль;
 
+const jsonString = '{"name": "John", "age": 30, "city": "New York"}'
+
 function transformJSON(jsonString) {
     try {
         return JSON.parse(jsonString);
@@ -27,7 +29,12 @@ function transformJSON(jsonString) {
     }
 }
 
-transformJSON()
+result = transformJSON(jsonString);
+console.log(result); // {name: 'John', age: 30, city: 'New York'}
+
+const jsonString2 = 'string';
+result2 = transformJSON(jsonString2); // Ошибка при преобразовании JSON: SyntaxError: Unexpected token 's', "string" is not valid JSON
+
 
 // 3. Напиши функцию `checkAccess`, которая принимает возраст пользователя. Если возраст меньше 18,
 // функция должна бросать ошибку с сообщением "Доступ запрещен". Используйте `try...catch` для обработки ошибок
@@ -43,7 +50,7 @@ function checkAccess(age) {
 try {
     console.log(checkAccess(16));
 } catch (error) {
-    console.log("ошибкаж:", error.message); // ошибкаж: Доступ запрещен
+    console.log("Ошибка:", error.message); // Ошибка: Доступ запрещен
 } finally {
     console.log("Проверка проведена"); // Проверка проведена
 }
