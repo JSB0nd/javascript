@@ -1,4 +1,4 @@
-// игрок
+// Игрок
 const player = {
     name: '',
     location: 'office',
@@ -7,61 +7,106 @@ const player = {
     defense: 5,
     awareness: 0,
     inventory: ['Мобильник'],
-    invitedToHideout: false
+    invitedToWhiteRoom: false,
+    foundGlitches: [],
+    usedPistol: false,
+    fighting: null,
+    currentEnemy: null,
 };
 
-// локации
-const locations = {
-    office: {
-        name: 'Офис',
-        description: 'Тусклый свет, серые стены, безжизненный монитор. Сотрудники словно клоны. Здесь всё кажется повторяющимся и мёртвым.',
-        actions: ['Проверить монитор', 'Открыть ящик', 'Выйти в коридор', 'Осмотреться']
+// Враги
+const enemies = {
+    agent: {
+        name: 'Агент',
+        health: 50,
+        strength: 15,
+        defense: 8,
+        description: '🕶️ Безликий охранник системы.'
     },
-    corridor: {
-        name: 'Коридор',
-        description: 'Бесконечный коридор с одинаковыми дверями и однообразными шагами. Кажется, ты уже был тут. Или это было вчера? Или час назад?',
-        actions: ['Вернуться в офис', 'Подняться по лестнице', 'Осмотреться']
-    },
-    stairs: {
-        name: 'Лестница',
-        description: 'Сырая, серая лестница ведёт вниз. На стенах пятна плесени. Кошка пробегает мимо... и снова.',
-        actions: ['Спуститься в метро', 'Вернуться в коридор', 'Осмотреться']
-    },
-    metro: {
-        name: 'Метро',
-        description: 'Пустая станция, мигающий экран и ощущение, что ты не один. Шум поездов звучит, хотя их давно нет. Мир подвис.',
-        actions: ['Осмотреть тоннель', 'Вернуться на лестницу', 'Осмотреться']
-    },
-    rooftop: {
-        name: 'Крыша',
-        description: 'Серое небо. Город мёртв. Кажется, кто-то наблюдает сверху...',
-        actions: ['Посмотреть вниз', 'Вернуться на лестницу', 'Осмотреться']
-    },
-    hideout: {
-        name: 'Скрытая зона',
-        description: 'Ты в белом пространстве, как будто внутри кода. Морфеус стоит с двумя таблетками.',
-        actions: ['Взять красную таблетку', 'Взять синюю таблетку']
-    },
+    agentSmith: {
+        name: 'Агент Смит',
+        health: 100,
+        strength: 25,
+        defense: 15,
+        description: '💀 Главный антагонист. Неумолим и силён.'
+    }
 };
 
-// dom
+// DOM
 const locationName = document.getElementById('location-name');
 const locationText = document.getElementById('location-text');
 const actionButtons = document.getElementById('action-buttons');
+const combatActions = document.getElementById('combat-actions');
+const attackBtn = document.getElementById('attack-btn');
+const dodgeBtn = document.getElementById('dodge-btn');
 const startButton = document.getElementById('start-button');
 const startScreen = document.getElementById('start-screen');
 const gameInterface = document.getElementById('game-interface');
 const characterName = document.getElementById('character-name');
 const logPanel = document.getElementById('log-content');
 
-// характеристики
 const statHealth = document.getElementById('stat-health');
 const statStrength = document.getElementById('stat-strength');
 const statDefense = document.getElementById('stat-defense');
 const statAwareness = document.getElementById('stat-awareness');
 const itemsList = document.getElementById('items');
 
-// запуск
+// Локации
+const locations = {
+    office: {
+        name: 'Офис',
+        description: 'Открытые кабинки, яркий свет и холодный монитор. Коллеги молчат, глядя в экраны. Воздух застоялся.',
+        actions: ['Проверить монитор', 'Открыть ящик', 'Выйти в коридор']
+    },
+    corridor: {
+        name: 'Коридор',
+        description: 'Тихий и длинный коридор с множеством одинаковых дверей. Пахнет пластиком и пылью.',
+        actions: ['Вернуться в офис', 'Зайти в туалет', 'Выйти на лестницу', 'Осмотреться'],
+        glitches: ['Отражение в стекле не двигается вместе с вами']
+    },
+    toilet: {
+        name: 'Туалет',
+        description: 'Холодный кафель, блеклое зеркало и ощущение наблюдения. На полу валяется аптечка.',
+        actions: ['Вернуться в коридор', 'Осмотреться']
+    },
+    stairs: {
+        name: 'Лестница',
+        description: 'Бетонные ступени ведут вверх и вниз. Свет тусклый, шаги гулко отдаются эхом.',
+        actions: ['Подняться на крышу', 'Выйти на улицу', 'Вернуться в коридор', 'Осмотреться'],
+        glitches: ['Тень от перил движется сама по себе', 'Кошка пробегает мимо... и снова']
+    },
+    street: {
+        name: 'Улица',
+        description: 'Мир снаружи не выглядит лучше — прохожие избегают взглядов, машины стоят в пробке, но никто не сигналит.',
+        actions: ['Подняться на лестницу', 'Спуститься в метро', 'Осмотреться'],
+        glitches: [
+            'Ветер дует в одну сторону, а облака — в другую',
+            'Люди начинают смотреть на тебя, как будто что-то знают'
+        ]
+    },
+    metro: {
+        name: 'Метро',
+        description: 'Станция пуста, табло мигает, но поездов нет. Кажется, время остановилось.',
+        actions: ['Осмотреть тоннель', 'Вернуться на улицу', 'Зайти в белую дверь', 'Осмотреться'],
+        glitches: [
+            'Табло мигает странной последовательностью: 010101...',
+            'Ты замечаешь белую дверь в стене, она не должна здесь быть'
+        ]
+    },
+    rooftop: {
+        name: 'Крыша',
+        description: 'Город стелется под ногами. Воздух плотный, будто наблюдает за тобой.',
+        actions: ['Посмотреть вниз', 'Спуститься на лестницу', 'Осмотреться'],
+        glitches: ['Птица повисла в воздухе и исчезла']
+    },
+    whiteRoom: {
+        name: 'Белая комната',
+        description: 'Бесконечная белизна. Перед тобой стоит Морфеус с таблетками. Здесь всё возможно.',
+        actions: ['Взять красную таблетку', 'Взять синюю таблетку', 'Осмотреться']
+    }
+};
+
+// Слушатели
 startButton.addEventListener('click', () => {
     const input = document.getElementById('player-name');
     const name = input.value.trim();
@@ -78,7 +123,10 @@ startButton.addEventListener('click', () => {
     updateLocation();
 });
 
-// обновление характеристик
+attackBtn.addEventListener('click', () => handleCombat('attack'));
+dodgeBtn.addEventListener('click', () => handleCombat('dodge'));
+
+// Обновление
 function updateStats() {
     statHealth.textContent = player.health;
     statStrength.textContent = player.strength;
@@ -86,77 +134,245 @@ function updateStats() {
     statAwareness.textContent = player.awareness;
 }
 
-// обновление инвентаря
 function updateInventory() {
     itemsList.innerHTML = '';
     player.inventory.forEach(item => {
         const div = document.createElement('div');
         div.textContent = item;
         itemsList.appendChild(div);
+        div.addEventListener('click', () => useItem(item));
     });
 }
 
-// обновление локации
-function updateLocation() {
-    const current = locations[player.location];
+function removeItem(item) {
+    const index = player.inventory.indexOf(item);
+    if (index !== -1) player.inventory.splice(index, 1);
+    updateInventory();
+}
 
-    locationName.textContent = current.name;
-    locationText.textContent = current.description;
+function useItem(item) {
+    switch (item) {
+        case 'Аптечка':
+            player.health += 30;
+            log('💊 Вы использовали аптечку. +30 здоровья');
+            removeItem(item);
+            break;
+        case 'Кофе':
+            player.health += 20;
+            log('☕ Вы выпили кофе. +20 здоровья');
+            removeItem(item);
+            break;
+        case 'Пистолет':
+            if (!player.usedPistol) {
+                player.strength += 40;
+                player.usedPistol = true;
+                log('🔫 Вы активировали пистолет. +40 к силе (разово)');
+                removeItem(item);
+                updateStats();
+            }
+            break;
+        case 'Источник':
+            player.health = 100;
+            log('⚡ Вы подключились к Источнику. Здоровье полностью восстановлено.');
+            removeItem(item);
+            break;
+    }
+    updateStats();
+}
+
+// Локация
+function updateLocation() {
+    const loc = locations[player.location];
+    locationName.textContent = loc.name;
+    locationText.textContent = loc.description;
 
     actionButtons.innerHTML = '';
-    current.actions.forEach(action => {
+    loc.actions.forEach(action => {
         const btn = document.createElement('button');
         btn.textContent = action;
         btn.addEventListener('click', () => handleAction(action));
         actionButtons.appendChild(btn);
     });
 
-    log(`Вы перешли в локацию: ${locations[player.location].name}`); // добавляем в лог переход
+    log(`📍 Вы находитесь в локации: ${loc.name}`);
+
+    const dangerZones = ['corridor', 'stairs', 'metro'];
+
+    if (player.awareness > 60 && player.location === 'rooftop') {
+        startFight('agentSmith');
+    } else if (
+        player.awareness > 20 &&
+        player.fighting === null &&
+        dangerZones.includes(player.location) &&
+        Math.random() < 0.8 // 80% шанс
+    ) {
+        startFight('agent');
+    } else {
+        endFight();
+    }
 }
 
-// лог
-function log(message) {
+function log(msg) {
     const p = document.createElement('p');
-    p.textContent = message;
+    p.textContent = msg;
     logPanel.appendChild(p);
     logPanel.scrollTop = logPanel.scrollHeight;
 }
 
-// проверка осознанности
-function checkAwareness() {
-    if (player.awareness >= 50 && !player.invitedToHideout) {
-        player.invitedToHideout = true;
-        log('📞 Мобильник звонит... Это Морфеус.');
-        log('Морфеус: «Ты чувствуешь это, да? Приходи. Я жду тебя в скрытой зоне.»');
-        
-        // откроем новое действие
-        locations[player.location].actions.push('Пойти в скрытую зону');
+// Бой
+function startFight(enemyKey) {
+    const base= enemies[enemyKey];
+    const enemy = {...base} // копия объекта противника
+    enemy.health = base.health;
+
+    player.fighting = enemyKey;
+    player.currentEnemy = enemy;
+
+    log(`⚠️ ${enemy.name} появился! ${enemy.description}`);
+    combatActions.classList.remove('hidden');
+}
+
+function endFight() {
+    player.fighting = null;
+    combatActions.classList.add('hidden');
+}
+
+function handleCombat(action) {
+    const enemy = player.currentEnemy;
+    if (!enemy) return;
+
+    if (action === 'attack') {
+        const damage = player.strength;
+        enemy.health -= damage;
+        log(`👊 Вы нанесли ${damage} урона ${enemy.name}. 🩸У противника осталось ${enemy.health > 0 ? enemy.health : 0} здоровья`);
+
+        if (enemy.health <= 0) {
+            log(`✅ ${enemy.name} побеждён! +10 к силе`);
+            player.strength += 10;
+            updateStats();
+            endFight();
+            return;
+        }
+
+        const retaliation = Math.max(enemy.strength - player.defense, 5);
+        player.health -= retaliation;
+        log(`🔁 ${enemy.name} отвечает ударом: -${retaliation} здоровья`);
+        updateStats();
+
+        if (player.health <= 0) endGame('☠️ Вы были побеждены.');
+    }
+
+    if (action === 'dodge') {
+        player.defense = Math.max(0, player.defense - 1);
+        updateStats();
+
+        if (player.fighting === 'agentSmith') {
+            log('❌ От агента Смита не уйти!');
+            return;
+        }
+
+        if (Math.random() < 0.5) {
+            log('💨 Вы успешно уклонились!');
+            endFight();
+        } else {
+            const retaliation = Math.max(enemy.strength - player.defense, 5);
+            player.health -= retaliation;
+            log(`😵 Не удалось уклониться! Получен урон: -${retaliation} HP`);
+            updateStats();
+
+            if (player.health <= 0) endGame('☠️ Вас одолели.');
+        }
     }
 }
 
-// действия
+function endGame(message) {
+    log(message);
+    actionButtons.innerHTML = '';
+    combatActions.classList.add('hidden');
+}
+
+// Действия
 function handleAction(action) {
     switch (action) {
         case 'Проверить монитор':
-            log('Экран мерцает зелёными символами. Это не просто текст...');
-            player.awareness += 5;
-            updateStats();
+            if (!player.foundGlitches.includes('monitor')) {
+                player.foundGlitches.push('monitor');
+                player.awareness += 7;
+                log('🖥️ Монитор мерцает нечитаемым зелёным кодом. +7 к осознанности');
+                updateStats();
+            } else {
+                log('🖥️ Экран пуст...');
+            }
             break;
 
         case 'Открыть ящик':
             if (!player.inventory.includes('Пистолет')) {
-                log('Вы нашли пистолет! +5 к силе');
                 player.inventory.push('Пистолет');
-                player.strength += 5;
-                updateStats();
+                log('🗃️ В ящике лежал пистолет!');
                 updateInventory();
             } else {
-                log('В ящике пусто.');
+                log('🗃️ В ящике пусто.');
             }
             break;
 
+        case 'Посмотреть вниз':
+            player.awareness += 5;
+            log('🔭 Нереальность всего накрывает тебя. +5 к осознанности');
+            updateStats();
+            break;
+
+        case 'Осмотреться': {
+            const loc = locations[player.location];
+            const glitches = loc.glitches || [];
+            const newGlitch = glitches.find(g => !player.foundGlitches.includes(g));
+            if (newGlitch) {
+                player.foundGlitches.push(newGlitch);
+                player.awareness += 8;
+                log(`🧠 ${newGlitch}. +8 к осознанности`);
+                updateStats();
+            } else {
+                log('🔍 Всё кажется обычным...');
+            }
+            checkAwareness();
+            break;
+        }
+
         case 'Выйти в коридор':
             player.location = 'corridor';
+            updateLocation();
+            break;
+
+        case 'Зайти в туалет':
+            player.location = 'toilet';
+            updateLocation();
+            if (!player.inventory.includes('Аптечка')) {
+                player.inventory.push('Аптечка');
+                updateInventory();
+                log('🚽 Вы нашли аптечку!');
+            }
+            break;
+
+        case 'Вернуться в коридор':
+            player.location = 'corridor';
+            updateLocation();
+            break;
+
+        case 'Выйти на лестницу':
+            player.location = 'stairs';
+            updateLocation();
+            break;
+
+        case 'Подняться на крышу':
+            if (player.inventory.includes('Пропуск')) {
+                player.location = 'rooftop';
+                updateLocation();
+            } else {
+                log('🚫 Лестница на крышу закрыта. Нужен пропуск.');
+            }
+            break;
+
+        case 'Спуститься на лестницу':
+            player.location = 'stairs';
             updateLocation();
             break;
 
@@ -165,13 +381,13 @@ function handleAction(action) {
             updateLocation();
             break;
 
-        case 'Подняться по лестнице':
-            player.location = 'stairs';
+        case 'Выйти на улицу':
+            player.location = 'street';
             updateLocation();
             break;
 
-        case 'Вернуться в коридор':
-            player.location = 'corridor';
+        case 'Подняться на лестницу':
+            player.location = 'stairs';
             updateLocation();
             break;
 
@@ -180,104 +396,51 @@ function handleAction(action) {
             updateLocation();
             break;
 
-        case 'Вернуться на лестницу':
-            player.location = 'stairs';
+        case 'Вернуться на улицу':
+            player.location = 'street';
             updateLocation();
             break;
 
         case 'Осмотреть тоннель':
             if (!player.inventory.includes('Пропуск')) {
-                log('Вы нашли Пропуск! +20 к осознанности');
                 player.inventory.push('Пропуск');
-                player.awareness += 20;
-                updateStats();
-                checkAwareness();
                 updateInventory();
+                log('📄 Вы нашли Пропуск! Теперь вы можете попасть на крышу.');
             } else {
-                log('Пропуск уже у вас.');
+                log('📄 Здесь пусто... Пропуск уже у вас.');
             }
             break;
 
-        case 'Поймать глюк в отражении':
-            log('Ваше отражение моргнуло, но вы не моргали. +5 к осознанности');
-            player.awareness += 5;
-            updateStats();
-            checkAwareness();
-            break;
-
-        case 'Посмотреть в мигающую лампу':
-            log('Свет мигает с точностью до секунды. Это не случайность. +5 к осознанности');
-            player.awareness += 5;
-            updateStats();
-            checkAwareness();
-            break;
-
-        case 'Вглядеться в глюк в пространстве':
-            log('Ступени на секунду исчезли, как будто вы находитесь в пустоте. +5 к осознанности');
-            player.awareness += 5;
-            checkAwareness();
-            updateStats();
-            break;
-
-        case 'Замереть и слушать шум':
-            log('Вы слышите странные цифры сквозь шум. Мир сломан. +5 к осознанности');
-            player.awareness += 5;
-            checkAwareness();
-            updateStats();
-            break;
-
-        case 'Осмотреться':
-            if (player.awareness >= 50 && !player.invitedToHideout) {
-                player.invitedToHideout = true;
-                log('📞 Мобильник звонит... Это Морфеус.');
-                log('Морфеус: «Ты чувствуешь это, да? Приходи. Я жду тебя в скрытой зоне.»');
-                const current = locations[player.location];
-                current.actions.push('Пойти в скрытую зону');
-                updateLocation(); // чтобы отобразилась новая кнопка
+        case 'Зайти в белую дверь':
+            if (player.awareness >= 50 && player.invitedToWhiteRoom) {
+                player.location = 'whiteRoom';
+                updateLocation();
             } else {
-                log('Ты чувствуешь, что что-то не так... но пока неясно что.');
+                log('🚪 Дверь кажется закрытой. Возможно, ты пока не готов.');
             }
-            break;
-
-        case 'Пойти в скрытую зону':
-            player.location = 'hideout';
-            updateLocation();
             break;
 
         case 'Взять красную таблетку':
-            log('Ты выбрал истину. Пробуждение началось.');
-            endGame('Ты проснулся. Добро пожаловать в реальность.');
+            log('🔴 Ты выбрал истину. Добро пожаловать в реальность.');
+            endGame('🧠 Пробуждение завершено.');
             break;
 
         case 'Взять синюю таблетку':
-            log('Ты выбрал забыть всё. Матрица обнимает тебя вновь.');
-            endGame('Ты заснул. Всё было сном. Или нет?');
-            break;
-
-        case 'Подняться на крышу':
-            player.location = 'rooftop';
-            updateLocation();
-            break;
-
-        case 'Вернуться на лестницу':
-            player.location = 'stairs';
-            updateLocation();
-            break;
-
-        case 'Посмотреть вниз':
-            log('Ты ощущаешь высоту... и нереальность всего вокруг. +5 к осознанности');
-            if (!player.foundGlitches.includes('rooftop')) {
-                player.foundGlitches.push('rooftop');
-                player.awareness += 5;
-                updateStats();
-                checkAwareness();
-            } else {
-                log('Ты уже смотрел вниз. Это ощущение знакомо.');
-            }
+            log('🔵 Матрица тебя снова обнимает...');
+            endGame('💤 Ты заснул. Или всё было сном?');
             break;
 
         default:
-            log('Ничего не происходит...');
+            log('❓ Ничего не произошло...');
     }
 }
 
+
+// Проверка звонка Морфеуса
+function checkAwareness() {
+    if (player.awareness >= 50 && !player.invitedToWhiteRoom) {
+        player.invitedToWhiteRoom = true;
+        log('📞 Звонит мобильник. Это Морфеус...');
+        log('🕴️ "Ты чувствуешь, что-то не так? Приходи... Я жду в белой комнате."');
+    }
+}
