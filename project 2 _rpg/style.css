@@ -126,6 +126,7 @@ h3 {
     border: 1px solid #0f0;
     padding: 10px;
     font-size: 20px;
+    position: relative;
 }
 
 #action-buttons {
@@ -201,4 +202,10 @@ button:hover {
   scroll-behavior: smooth;
   overflow-y: auto;
   height: 180px;
+}
+
+#restart-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }

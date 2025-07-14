@@ -50,6 +50,7 @@ const statStrength = document.getElementById('stat-strength');
 const statDefense = document.getElementById('stat-defense');
 const statAwareness = document.getElementById('stat-awareness');
 const itemsList = document.getElementById('items');
+const restart = document.getElementById('restart-button');
 
 // Локации
 const locations = {
@@ -123,6 +124,7 @@ startButton.addEventListener('click', () => {
     updateLocation();
 });
 
+restart.addEventListener('click', () => {location.reload()});
 attackBtn.addEventListener('click', () => handleCombat('attack'));
 dodgeBtn.addEventListener('click', () => handleCombat('dodge'));
 
