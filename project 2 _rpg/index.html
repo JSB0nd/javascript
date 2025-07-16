@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<canvas id="matrix-canvas"></canvas>
 <main class="container">
     <div id="start-screen">
-        <h1>ПРОБУЖДЕНИЕ</h1>
+        <h1 class="glitch-text neon-green">ПРОБУЖДЕНИЕ</h1>
         <div id="start-description">
-            <p>Вы чувствуете, что что-то не так... Этот мир слишком идеален, чтобы быть настоящим.</p>
-            <p>Введите имя и начните своё пробуждение.</p>
+            <p>Ты чувствуешь, что что-то не так... Этот мир слишком идеален, слишком упорядочен.</p>
+            <p>В людях нет жизни, в улицах — повторение, в воздухе — пустота.</p>
+            <p>Сквозь рутину прорываются трещины, и внутри зарождается вопрос: «А если всё это — иллюзия?»</p>
+            <p>Введи своё имя и начни путь к пробуждению.</p>
         </div>
         <div class="start">
             <input type="text" id="player-name" placeholder="Введите своё имя" class="dark-input">
@@ -25,7 +28,7 @@
     <div id="game-interface" class="hidden">
         <div id="character-panel">
             <div class="character">
-                <h2 id="character-name" class="char-name">Нео</h2>
+                <h2 id="character-name" class="char-name neon-blue">Нео</h2>
                 <div class="stats-container">
                     <div class="stat">
                         <label>Здоровье:</label>
@@ -73,6 +76,7 @@
             <div id="log-content"></div>
         </div>
     </div>
+<!--    <div id="matrix-code" class="hidden"></div>-->
 
     <div id="ending-screen" class="hidden">
         <h2>Игра завершена</h2>
