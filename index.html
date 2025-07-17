@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Обработка ошибок ⚠️</title>
+    <title>setTimeout, setInterval ⏳</title>
     <style>
         h1 {
             font-size: 100px;
@@ -16,14 +16,35 @@
             height: 100px;
             display: flex;
             justify-content: end;
-            border: 3px solid black;
+            border: 10px solid black;
             font-family: "Apple Symbols", sans-serif;
+        }
+
+        .bigText {
+            box-sizing: border-box;
+            font-size: 30px;
+            color: black;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .delayedText {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
     </style>
 </head>
 <body id="body">
     <h1 id="main-title">JavaScript</h1>
-    <script src="js/lesson25.js">
+    <div class="delayedText">
+        <input class="bigText" id="delay" min="1" type="number" placeholder="Задержка в секундах">
+        <input class="bigText" id="text" type="text" placeholder="Текст для вывода в консоль">
+        <button class="bigText" id="start">Начать</button>
+    </div>
+    
+    
+    <script src="js/lesson27.js">
 
     </script>
 </body>
