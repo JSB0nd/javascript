@@ -5,14 +5,14 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Async/Await 🔄</title>
+    <title>Всплытие и погружение🍾</title>
     <style>
         h1 {
             font-size: 100px;
             color: black;
             background: #faa716;
             padding: 50px 20px 20px 20px;
-            max-width: 500px;
+            max-width: 700px;
             height: 100px;
             display: flex;
             justify-content: end;
@@ -20,12 +20,44 @@
             font-family: "Apple Symbols", sans-serif;
         }
 
+        div {
+            width: fit-content;
+            border: 5px solid black;
+            padding: 30px;
+            font-size: 2rem;
+        }
+
+        .wrapper {
+            border: 2px solid black;
+            padding: 30px;
+            width: fit-content;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body id="body">
     <h1 id="main-title">JavaScript</h1>
 
-    <script src="js/lesson29.js">
+    <div id="first">
+        Click 1
+        <div id="second">
+            Click 2
+            <div id="third">Click 3</div>
+        </div>
+    </div>
+
+    <form action="" id="form" class="wrapper">
+        <p>
+            <label for="name">Введите</label>
+            <input type="text" name="name" id="name" placeholder="Имя">
+        </p>
+        <p>
+            <label for="surname">Введите</label>
+            <input type="text" name="name" id="surname" placeholder="Фамилия">
+        </p>
+        <button type="submit">Отправить</button>
+    </form>
+    <script src="js/lesson30.js">
     </script>
 </body>
 </html>
