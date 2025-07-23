@@ -5,59 +5,129 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Всплытие и погружение🍾</title>
+    <title>LocalStorage и SessionStorage 💾</title>
     <style>
         h1 {
             font-size: 100px;
             color: black;
             background: #faa716;
-            padding: 50px 20px 20px 20px;
-            max-width: 700px;
+            padding: 60px 30px 10px 70px;
+            margin: 20px 0;
+            width: fit-content;
+            min-width: 100px;
             height: 100px;
             display: flex;
             justify-content: end;
             border: 10px solid black;
             font-family: "Apple Symbols", sans-serif;
+            border-radius: 20px;
         }
 
-        div {
-            width: fit-content;
-            border: 5px solid black;
-            padding: 30px;
-            font-size: 2rem;
+        * {
+            font-family: "Apple Symbols", monospace;
         }
-
         .wrapper {
-            border: 2px solid black;
-            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid black;
             width: fit-content;
-            margin-top: 20px;
+            padding: 10px;
+            min-width: 200px;
+            min-height: 110px;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            gap: 100px;
+        }
+
+        .right-column, .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 200px;
+        }
+
+        .log {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid black;
+            width: fit-content;
+            padding: 10px;
+            min-width: 180px;
+            min-height: 110px;
+        }
+
+        .visit-text {
+            font-family: "Apple Symbols", monospace;
+            font-size: 1.5rem;
+            padding: 20px;
+            border: 1px solid black;
+            width: fit-content;
+            margin: 10px 0;
+        }
+
+        #visit-time {
+            font-size: 2rem;
+            font-family: "Apple Symbols", monospace;
+            color: #faa716;
+
+        }
+
+        .center {
+            text-align: center;
         }
     </style>
 </head>
 <body id="body">
-    <h1 id="main-title">JavaScript</h1>
+<h1 id="main-title">JavaScript</h1>
+<p class="visit-text">вкладка открыта: <span id="visit-time"></span></p>
+<div class="container">
+    <div class="left-column">
 
-    <div id="first">
-        Click 1
-        <div id="second">
-            Click 2
-            <div id="third">Click 3</div>
-        </div>
+        <form action="" id="form" class="wrapper">
+            <input type="text" id="name" placeholder="Введите имя">
+            <input type="text" id="phone" placeholder="Введите телефон">
+            <input type="email" id="email" placeholder="Введите почту">
+            <button type="button" id="save-user">Сохранить</button>
+        </form>
+        <form action="" class="wrapper">
+            <button type="button" id="get-user" style="color:grey">Показать данные</button>
+            <div class="log">
+                <p id="output-name"></p>
+                <p id="output-phone"></p>
+                <p id="output-email"></p>
+            </div>
+        </form>
     </div>
 
-    <form action="" id="form" class="wrapper">
-        <p>
-            <label for="name">Введите</label>
-            <input type="text" name="name" id="name" placeholder="Имя">
-        </p>
-        <p>
-            <label for="surname">Введите</label>
-            <input type="text" name="name" id="surname" placeholder="Фамилия">
-        </p>
-        <button type="submit">Отправить</button>
-    </form>
-    <script src="js/lesson30.js">
+        <div class="right-column">
+            <form action="" class="wrapper">
+                <p class="center">Журнал расходов</p>
+                <input type="text" id="item" placeholder="Покупка">
+                <input type="number" id="price" min="0" step="0.01" placeholder="Сумма, р">
+                <input type="date" id="date" placeholder="Дата">
+                <button type="button" id="save-log">Сохранить</button>
+            </form>
+            <form action="" class="wrapper">
+                <button type="button" id="get-item" style="color:grey">Показать журнал</button>
+                <button type="button" id="clear-btn" style="color:red">Очистить журнал</button>
+                <div id="expense-list" class="log"></div>
+<!--                    <p id="output-item"></p>-->
+<!--                    <p id="output-price"></p>-->
+<!--                    <p id="output-date"></p>-->
+            </form>
+        </div>
+
+    </div>
+    <script src="js/lesson31.js">
     </script>
 </body>
 </html>
