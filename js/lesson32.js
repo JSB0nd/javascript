@@ -119,6 +119,7 @@ const inputNewId = document.getElementById('new-user-id');
 const inputNewTitle = document.getElementById('new-title');
 const inputNewPost = document.getElementById('new-post');
 const putData = document.getElementById('put');
+const uploadData = document.getElementById('upload-data');
 
 const putPost = (id, updatedData) => {
     return fetch(`${requestURL}/${id}`, {
@@ -145,6 +146,13 @@ putData.addEventListener('click', (e) => {
         .then((res) => {
             console.log(`Обновили пост ${id}:`);
             console.log(res);
+            uploadData.innerHTML = `
+            <p>Обновили пост ${id}:</p>
+            <p>Заголовок:</p>
+            <p>${newTitle}</p>
+            <p>Содержимое:</p>
+            <p>${newPost}</p>
+`;
             return res;
         })
 });
