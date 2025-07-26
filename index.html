@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>LocalStorage и SessionStorage 💾</title>
+    <title>AJAX и Fetch API 📲</title>
     <style>
         h1 {
             font-size: 100px;
@@ -24,110 +24,64 @@
         }
 
         * {
-            font-family: "Apple Symbols", monospace;
+            font-size: 1.2rem;
         }
         .wrapper {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            border: 1px solid black;
+            border: 2px solid black;
             width: fit-content;
             padding: 10px;
-            min-width: 200px;
-            min-height: 110px;
-        }
-
-        p {
-            margin: 0;
-            padding: 0;
+            min-width: 300px;
+            /*min-height: 110px;*/
+            border-radius: 5px;
         }
 
         .container {
             display: flex;
-            gap: 100px;
-        }
-
-        .right-column, .left-column {
-            display: flex;
             flex-direction: column;
-            gap: 10px;
-            min-width: 200px;
+            gap: 20px;
         }
 
-        .log {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        #post-list {
             border: 1px solid black;
-            width: fit-content;
-            padding: 10px;
-            min-width: 180px;
-            min-height: 110px;
+            padding-left: 5px;
+            list-style: none;
+            margin: 0;
         }
 
-        .visit-text {
-            font-family: "Apple Symbols", monospace;
-            font-size: 1.5rem;
-            padding: 20px;
-            border: 1px solid black;
-            width: fit-content;
-            margin: 10px 0;
-        }
-
-        #visit-time {
-            font-size: 2rem;
-            font-family: "Apple Symbols", monospace;
-            color: #faa716;
-
-        }
-
-        .center {
-            text-align: center;
-        }
     </style>
 </head>
-<body id="body">
-<h1 id="main-title">JavaScript</h1>
-<p class="visit-text">вкладка открыта: <span id="visit-time"></span></p>
-<div class="container">
-    <div class="left-column">
-
-        <form action="" id="form" class="wrapper">
-            <input type="text" id="name" placeholder="Введите имя">
-            <input type="text" id="phone" placeholder="Введите телефон">
-            <input type="email" id="email" placeholder="Введите почту">
-            <button type="button" id="save-user">Сохранить</button>
+<body>
+    <h1 id="main-title">JavaScript</h1>
+    <div class="container">
+        <form action="" class="wrapper">
+            <input type="text" id="user-id" placeholder="ID пользователя">
+            <input type="text" id="title" placeholder="Заголовок">
+            <input type="email" id="post" placeholder="Содержимое">
+            <button type="button" id="save-data-btn">Отправить</button>
+            <div id="answers"></div>
         </form>
         <form action="" class="wrapper">
-            <button type="button" id="get-user" style="color:grey">Показать данные</button>
-            <div class="log">
-                <p id="output-name"></p>
-                <p id="output-phone"></p>
-                <p id="output-email"></p>
-            </div>
+            <button type="button" id="load-data-btn">Список постов</button>
+            <ul id="post-list"></ul>
+            <button type="button" id="clear-list">Очистить список</button>
         </form>
-    </div>
-
-        <div class="right-column">
-            <form action="" class="wrapper">
-                <p class="center">Журнал расходов</p>
-                <input type="text" id="item" placeholder="Покупка">
-                <input type="number" id="price" min="0" step="0.01" placeholder="Сумма, р">
-                <input type="date" id="date" placeholder="Дата">
-                <button type="button" id="save-log">Сохранить</button>
-            </form>
-            <form action="" class="wrapper">
-                <button type="button" id="get-item" style="color:grey">Показать журнал</button>
-                <button type="button" id="clear-btn" style="color:red">Очистить журнал</button>
-                <div id="expense-list" class="log"></div>
-<!--                    <p id="output-item"></p>-->
-<!--                    <p id="output-price"></p>-->
-<!--                    <p id="output-date"></p>-->
-            </form>
-        </div>
+        <form action="" class="wrapper">
+            <input type="text" id="delete-id" placeholder="ID для удаления">
+            <button type="button" id="delete-btn">Удалить пост</button>
+        </form>
+        <form action="" class="wrapper">
+            <input type="text" id="new-user-id" placeholder="ID пользователя">
+            <input type="text" id="new-title" placeholder="другой Заголовок">
+            <input type="email" id="new-post" placeholder="другое Содержимое">
+            <button type="button" id="put">Обновить</button>
+            <div id="uploaad-data"></div>
+        </form>
 
     </div>
-    <script src="js/lesson31.js">
-    </script>
+<script src="js/lesson32.js">
+</script>
 </body>
 </html>
