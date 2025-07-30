@@ -14,11 +14,15 @@ const headers = {
 
 function fetchPosts() {
     return fetch(requestURL)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw Error(`Ошибка сети!`);
+            return res.json();
+
+        });
 }
 
 function renderPosts(posts) {
-    postList.innerHTML = '';
+    postList.innerHTML = ''; // очистка перед новым выводом
 
     posts.forEach(post => {
         const postInfo = document.createElement('li');
@@ -32,15 +36,6 @@ function reloadPosts() {
     return fetchPosts().then(renderPosts).catch(err => console.error(err));
 }
 
-// function sendRequest(method, url, body = null) {
-//     return fetch(url, {
-//         method: method,
-//         body: JSON.stringify(body),
-//         headers: headers
-//     })
-//         .then(res => res.json())
-// }
-
 saveData.addEventListener('click',() => {
         const userId = inputUserID.value.trim();
         const title = inputTitle.value;
@@ -52,19 +47,21 @@ saveData.addEventListener('click',() => {
         };
 
     fetch(requestURL, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: headers
-})
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-
-        let postId = document.createElement('p');
-        postId.textContent = `Созданный пост ID: ${data.id}`;
-        outputAnswer.appendChild(postId);
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: headers
     })
-    .catch(err => console.log('Ошибка:',err))
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+
+            outputAnswer.innerHTML = ''; // очистка перед выводом
+
+            const postId = document.createElement('p');
+            postId.textContent = `Созданный пост ID: ${data.id}`;
+            outputAnswer.appendChild(postId);
+        })
+        .catch(err => console.log('Ошибка:', err))
 }) // Созданный пост ID: 101
 
 // 2. Реализуй кнопку для загрузки списка постов.
@@ -81,7 +78,7 @@ loadData.addEventListener('click', (e) => {
 })
 
 clearList.addEventListener('click', (e) => {
-    postList.innerHTML = '';
+    postList.innerHTML = ''; // очистка перед выводом
 })
 
 // 3. Создай функцию для удаления поста по id.
@@ -95,6 +92,7 @@ deleteButton.addEventListener('click', (e) => {
     const id = inputDeleteId.value.trim();
     if (!id) return;
 
+
     fetch(`${requestURL}/${id}`, {method: 'DELETE'})
         .then(res => {
             return null
@@ -104,10 +102,15 @@ deleteButton.addEventListener('click', (e) => {
         //     return reloadPosts()
         // }) // не изменяется json posts чтобы отобразить изменения, поэтому меняем DOM
         .then(() => {
-            console.log(`${id} - удалён`);
             const li = postList.querySelector(`[data-post-id="${id}"]`);
-            if (li) li.remove();
+            if (!li) {
+                console.error(`Поста с ${id} не существует`)
+            } else {
+                li.remove();
+                console.log(`${id} - удалён`);
+            }
         })
+        .catch(err => console.log('Ошибка:', err))
 })
 
 // 4. Реализуй функциональность для обновления данных пользователя.
@@ -127,7 +130,7 @@ const putPost = (id, updatedData) => {
         headers: headers,
         body: JSON.stringify(updatedData),
     })
-    .then(res => res.json())
+        .then(res => res.json())
 }
 
 putData.addEventListener('click', (e) => {
@@ -155,6 +158,7 @@ putData.addEventListener('click', (e) => {
 `;
             return res;
         })
+        .catch(err => console.log('Ошибка:', err))
 });
 
 // разница методов PUT и PATCH, в том что первый обновляет весь объект, второй только часть
