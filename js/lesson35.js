@@ -28,17 +28,17 @@ class Student extends Person {
 
 const ivan = new Student('Иван', '2');
 ivan.introduce(); // Привет, я студент Иван, и я учусь на 2 курсе.
-Person.prototype.introduce(); // Привет, меня зовут undefined
-Student.prototype.introduce(); // Привет, я студент undefined, и я учусь на undefined курсе.
-console.log(Person.prototype); // {} - пустой объект прототип для класса персон
-console.log(Student.prototype); // Person {} - прототип для класса студент
+// Person.prototype.introduce(); // Привет, меня зовут undefined
+// Student.prototype.introduce(); // Привет, я студент undefined, и я учусь на undefined курсе.
+console.log(Person.prototype); // {introduce: ƒ} объект с прототипом Object.prototype
+console.log(Student.prototype); // Person {introduce: ƒ} объект созданный с прототипом Person.prototype
 console.log(ivan.prototype) // undefined - потому что у объекта нет свойства prototype, оно есть только у конструкторов
-console.log(Object.getPrototypeOf(ivan)) // Person {}
-console.log(Object.getPrototypeOf(Student)); // [class Person]
-console.log(Object.getPrototypeOf(Student.prototype)); // {}
-console.log(Object.getPrototypeOf(Person)); // [Function (anonymous)] Object
-console.log(Object.getPrototypeOf(Person.prototype)); // [Object: null prototype] {}
-console.log(Object.getPrototypeOf(Object.prototype)); //
+console.log(Object.getPrototypeOf(ivan)) // Person {introduce: ƒ}
+console.log(Object.getPrototypeOf(Student)); // class Person
+console.log(Object.getPrototypeOf(Student.prototype)); // {introduce: ƒ}
+console.log(Object.getPrototypeOf(Person)); // ƒ () { [native code] }
+console.log(Object.getPrototypeOf(Person.prototype)); // {__defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, __lookupSetter__: ƒ, …}
+console.log(Object.getPrototypeOf(Object.prototype)); // null
 
 // 2. Создай класс Employee, наследующий Person.
 // Класс должен добавлять свойство position и метод work,
