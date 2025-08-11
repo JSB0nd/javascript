@@ -12,12 +12,18 @@ Object.defineProperty(pet, 'name', {
     configurable: false,
 })
 
-pet.age = 5;
+Object.defineProperty(pet, 'age', {
+    value: 5,
+    writable: false,
+    enumerable: false,
+    configurable: false,
+})
+
 console.log(pet.name); // Vasilisa
 console.log(pet.age); // 5
 
 pet.age = 5.5;
-console.log(pet.age); // 5.5 - так как через точку присваивается true всем дескрипторам
+console.log(pet.age); // 5 - не изменилось
 
 pet.name = 'Margo';
 console.log(pet.name); // Vasilisa - не изменилось
@@ -55,8 +61,8 @@ Object.defineProperty(car, 'color', {
 })
 
 console.log(car); // {model: 'Accent', year: '2003', color: 'blue'}
-console.log(Object.values(car)); // ['Accent', '2003']
-console.log(Object.keys(car)); // ['model', 'year']
+console.log(Object.values(car)); // ['Accent', '2003'] - отражают только перечисляемые свойства
+console.log(Object.keys(car)); // ['model', 'year'] - отражает только перечесляемые свойства
 
 for (const key in car) {
     console.log(key) // model year
