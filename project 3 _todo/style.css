@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pacifico', sans-serif;
+}
+
+body {
+    background-color: rgb(73, 73, 73);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 80%;
+    min-width: 60%;
+    margin: auto;
+    background-color: rgb(205, 221, 240);
+    border: 2px solid lightseagreen;
+    border-radius: 40px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 900;
+}
+
+.input-wrapper {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.input-task {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    width: 100%;
+    border: 2px solid lightseagreen;
+    outline: none;
+    height: 60px;
+}
+
+.button {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    border: 2px solid lightseagreen;
+    background-color: rgb(32, 137, 178);
+    color: white;
+    height: 60px;
+    /* min-width: 60px; */
+}
+
+.button:active {
+    background-color: white;
+    color: rgb(32, 137, 178);
+    transform: scale(0.8);
+    transition: 0.2s;
+}
+
+.task-list {
+    padding: 10px;
+    width: 100%;
+}
+
+.task-wrapper {
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 1.5rem;
+    width: 100%;
+    border: 2px solid lightseagreen;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background-color: white;
+    
+}
+
+.task {
+    
+}
+
+.task-text {
+    font-size: 1.5rem;
+    width: 100%;
+}
+
+
+.delete-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    background-color: transparent;
+    border: 2px solid lightseagreen;
+    color: rgb(32, 137, 178);
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.delete-btn:hover {
+    background-color: rgb(32, 137, 178);
+    color: white;
+}
+
+.delete-btn:active {
+    transform: rotate(180deg) scale(0.8);
+    transition: 0.2s;
+}
+
