@@ -17,19 +17,25 @@
     <div class="container">
         <p class="title">TO-DO</p>
         <section class="input-wrapper">
-            <input type="text" placeholder="Напоминание..." class="input-task">
-            <button class="button">Добавить</button>
+            <input type="text" placeholder="Введите задачу" id="input" class="input-task" required>
+            <button id="submit" class="button">Добавить</button>
         </section>
-        <section class="task-list">
-            <div class="task-wrapper">
-                <label for="task-checkbox" class="task">
+        <select class="task-options" id="options">
+                <option value="active">активные</option>
+                <option value="completed">завершенные</option>
+                <option value="deleted">удаленные</option>
+            </select>
+        <ul class="task-list">
+            
+            <li class="task-item">
+                <label for="task-checkbox">
                     <input type="checkbox" id="task-checkbox">
                 </label>
                 <span class="task-text">Текст напоминания</span>
                 <button id="task-timer">⏰</button>
                 <button class="delete-btn">✖</button>
-            </div>
-        </section>
+            </li>
+        </ul>
     </div>
     <script src="/project 3 _todo/javascript.js"></script>
 </body>
