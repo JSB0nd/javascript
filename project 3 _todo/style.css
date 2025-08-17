@@ -72,7 +72,7 @@ body {
     color: rgb(32, 137, 178);
 }
 
-.task-list {
+#task-list {
     padding: 10px;
     width: 100%;
 }
@@ -90,7 +90,7 @@ body {
     
 }
 
-.task-checkbox:checked span { /* TODO: отмеченная задача */
+.task-item.completed .task-text { /* TODO: отмеченная задача */
     text-decoration: line-through;
     color: grey;
 } 
