@@ -18,12 +18,13 @@ body {
     min-width: 60%;
     margin: auto;
     background-color: rgb(205, 221, 240);
-    border: 2px solid lightseagreen;
+    border: 10px solid lightseagreen;
     border-radius: 40px;
     padding: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
+    gap: 10px;
 }
 
 .title {
@@ -36,6 +37,9 @@ body {
     padding: 20px;
     display: flex;
     gap: 10px;
+    border: 2px solid lightseagreen;
+    border-radius: 30px;
+    background-color: rgb(32, 137, 178);
 }
 
 .input-task {
@@ -48,7 +52,7 @@ body {
     height: 60px;
 }
 
-.button, .task-options {
+.button {
     padding: 10px 20px;
     border-radius: 10px;
     font-size: 1.5rem;
@@ -57,7 +61,7 @@ body {
     color: white;
     height: 60px;
     outline: none;
-    /* min-width: 60px; */
+    cursor: pointer;
 }
 
 .button:active {
@@ -67,14 +71,12 @@ body {
     transition: 0.2s;
 }
 
-.task-options:open {
-    background-color: white;
-    color: rgb(32, 137, 178);
-}
-
 #task-list {
     padding: 10px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .task-item {
@@ -87,39 +89,62 @@ body {
     gap: 10px;
     align-items: center;
     background-color: white;
-    
+
 }
 
 .task-item.completed .task-text { /* TODO: отмеченная задача */
     text-decoration: line-through;
     color: grey;
-} 
+    transition: 0.5s;
+}
+.task-item.completed .task-timer{
+    display: none;
+    transition: 0.5s;
+}
+
+.task-item input[type="checkbox"] {
+    accent-color: rgb(32, 137, 178);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
 
 .task-text {
     font-size: 1.5rem;
     width: 100%;
 }
 
-
-.delete-btn {
-    width: 60px;
+.task-timer {
+    padding: 15px;
     height: 60px;
     border-radius: 10px;
-    background-color: transparent;
     border: 2px solid lightseagreen;
-    color: rgb(32, 137, 178);
+    background-color: rgb(32, 137, 178);
     font-weight: bold;
     font-size: 1.2rem;
     cursor: pointer;
     line-height: 1;
 }
-.delete-btn:hover {
-    background-color: rgb(32, 137, 178);
-    color: white;
-}
 
-.delete-btn:active {
-    transform: rotate(180deg) scale(0.8);
-    transition: 0.2s;
-}
+/*.delete-btn {*/
+/*    width: fit-content;*/
+/*    height: 60px;*/
+/*    border-radius: 10px;*/
+/*    background-color: transparent;*/
+/*    border: 2px solid lightseagreen;*/
+/*    color: rgb(32, 137, 178);*/
+/*    font-weight: bold;*/
+/*    font-size: 1.2rem;*/
+/*    cursor: pointer;*/
+/*    line-height: 1;*/
+/*}*/
+/*.delete-btn:hover {*/
+/*    background-color: rgb(32, 137, 178);*/
+/*    color: white;*/
+/*}*/
+
+/*.delete-btn:active {*/
+/*    transform: scale(0.8);*/
+/*    transition: 0.2s;*/
+/*}*/
 

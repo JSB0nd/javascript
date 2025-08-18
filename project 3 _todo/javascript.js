@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('task-list');
     const inputField = document.getElementById('input');
-    const submitButton = document.getElementById('submit');
+    const submitForm = document.querySelector('form');
 
 // загрузка из LocalStorage
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -14,20 +14,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // отрисовка задач
     function renderTasks() {
         taskList.innerHTML = '';
-        tasks.forEach(task => {
+        tasks.forEach((task, index) => {
             const li = document.createElement('li');
             li.className = `task-item ${task.completed ? ' completed' : ''}`;
             li.innerHTML = `
                 <input type="checkbox" ${task.completed ? 'checked' : ''}>
                 <span class="task-text">${task.text}</span>
-                <button id="task-timer">⏰</button>
-                <button class="delete-btn">Удалить</button>
+                <button class="task-timer">⏰</button>
+                <button class="delete-btn button">Удалить</button>
     `;
 
             const checkbox = li.querySelector('input[type="checkbox"]');
             checkbox.addEventListener('change', () => toggleTask(index));
 
-            const deleteBtn = li.querySelector('.delete-btn');
+            const deleteBtn = li.querySelector(".delete-btn");
             deleteBtn.addEventListener('click', () => deleteTask(index));
 
             taskList.appendChild(li);
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // добавление задачи
     function addTask(text) {
-        tasks.push({text, completed: false});
+        tasks.push({text: text, completed: false});
         saveTasks();
         renderTasks();
     }
@@ -56,39 +56,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 //  слушатель инпута
-    submitButton.addEventListener('click', () => {
+    submitForm.addEventListener('submit', (e) => {
+        e.preventDefault();
         const text = inputField.value.trim();
         if (text) {
             addTask(text);
             inputField.value = '';
+        } else {
+            alert('Задача не может быть пустой!');
         }
     });
 
     renderTasks();
 });
-
-
-
-
-
-
-
-const taskBase = {
-    text: '',
-    checked: false,
-    timer: false,
-}
-
-
-
-const isText = function() {
-    
-
-    if(!inputText) return;
-    const task = {...taskBase};
-    task.text = inputText;
-}
-
 
 
 // https://pokodem.ru/sozdanie-prostogo-todo-list-na-javascript-s-nulya-poshagovoe-rukovodstvo/

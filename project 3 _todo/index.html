@@ -16,24 +16,24 @@
 <body>
     <div class="container">
         <p class="title">TO-DO</p>
-        <section class="input-wrapper">
+        <form class="input-wrapper">
             <input type="text" placeholder="Введите задачу" id="input" class="input-task" required>
-            <button id="submit" class="button">Добавить</button>
-        </section>
-        <select class="task-options" id="options">
-                <option value="active">активные</option>
-                <option value="completed">завершенные</option>
-                <option value="deleted">удаленные</option>
-            </select>
+            <button type="submit" id="submit" class="button">Добавить</button>
+        </form>
         <ul id="task-list">
 
             <li class="task-item">
-                <!--                <input type="checkbox" ${task.completed ? 'checked' : ''}> : '-->
-                <!--                <span class="task-text">${task.text}</span>-->
-                <!--                <button id="task-timer">⏰</button>-->
-                <!--                <button class="delete-btn">Удалить</button>-->
+<!--                <input type="checkbox" ${task.completed ? 'checked' : ''}>-->
+<!--                <span class="task-text">${task.text}</span>-->
+<!--                <button class="task-timer">⏰</button>-->
+<!--                <button class="delete-btn button">Удалить</button>-->
             </li>
         </ul>
+        <section class="task-options">
+            <button class="button" id="active">Активные</button>
+            <button class="button" id="completed">Заверешнные</button>
+            <button class="button" id="deleted">Удаленные</button>
+        </section>
     </div>
     <script src="/project 3 _todo/javascript.js"></script>
 </body>
