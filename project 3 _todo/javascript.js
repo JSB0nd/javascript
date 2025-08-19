@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const deleteBtn = li.querySelector(".delete-btn");
             deleteBtn.addEventListener('click', () => deleteTask(index));
 
+            const timer = li.querySelector('.task-timer');
+            timer.addEventListener('click', ()=> timerTask(task.text))
+
             taskList.appendChild(li);
         });
     }
@@ -67,8 +70,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // timer.addEventListener('click', () => {
+    //     prompt('Сколько секунд таймера?', timerStamp);
+    //     let timerId = setTimeout(() => alert(`${text}`), timerStamp)
+    //     clearTimeout(timerId)
+    // });
+
+    function timerTask(text) {
+        const timerStampString = prompt('Сколько секунд таймера?', '5');
+
+        if (timerStampString === null) { // обработка кнопки Отмены
+            return;
+        }
+
+        const timerStamp = Number(timerStampString);
+
+        if (!isNaN(timerStamp) && timerStamp > 0) {
+            console.log(`Таймер установлен на ${timerStamp} секунд для задачи:
+                 ${text}`);
+
+            setTimeout(() => {
+                alert(`⏰ Время дла задачи: ${text}`);
+                }, timerStamp * 1000);
+        } else {
+            alert('Пожалуйста, введите положительное число!')
+            console.log(`${timerStamp} не является положительным числом`);
+        }
+    }
+
     renderTasks();
 });
-
-
-// https://pokodem.ru/sozdanie-prostogo-todo-list-na-javascript-s-nulya-poshagovoe-rukovodstvo/

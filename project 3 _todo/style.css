@@ -89,7 +89,11 @@ body {
     gap: 10px;
     align-items: center;
     background-color: white;
+}
 
+.task-item::before {
+    transition: 0.5s;
+    transform: scale(0.8);
 }
 
 .task-item.completed .task-text { /* TODO: отмеченная задача */
