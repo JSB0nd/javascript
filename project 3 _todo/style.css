@@ -117,7 +117,7 @@ body {
 .task-text {
     font-size: 1.5rem;
     width: 100%;
-    color: #457b9d;
+
     transition: 
     color 0.2s ease-in-out,
     opacity 0.4s ease-in-out;
@@ -168,25 +168,36 @@ body {
     gap: 10px;
 }
 
-/*.delete-btn {*/
-/*    width: fit-content;*/
-/*    height: 60px;*/
-/*    border-radius: 10px;*/
-/*    background-color: transparent;*/
-/*    border: 2px solid lightseagreen;*/
-/*    color: rgb(32, 137, 178);*/
-/*    font-weight: bold;*/
-/*    font-size: 1.2rem;*/
-/*    cursor: pointer;*/
-/*    line-height: 1;*/
-/*}*/
-/*.delete-btn:hover {*/
-/*    background-color: rgb(32, 137, 178);*/
-/*    color: white;*/
-/*}*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
 
-/*.delete-btn:active {*/
-/*    transform: scale(0.8);*/
-/*    transition: 0.2s;*/
-/*}*/
+.modal-content {
+    width: fit-content;
+    max-width: 40%;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 20px;
+    border: 5px solid lightseagreen;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 0 50px lightseagreen;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20% auto;
+}
+
+.modal-content p {
+    font-size: 4rem;
+    color: #457b9d;
+    text-shadow: 0 0 20px lightseagreen;
+}
+
 

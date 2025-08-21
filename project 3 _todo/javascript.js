@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const sortTaskUnsort = document.getElementById('unsorted');
     const sortTaskActive = document.getElementById('active');
     const sortTaskComplete = document.getElementById('completed');
+    const customAlert = document.getElementById('custom-alert');
+    const alertMessage = document.getElementById('alert-message');
+    const okButton = document.getElementById('ok-button');
+
     const requestURL = 'https://jsonplaceholder.typicode.com/todos';
     let tasks = [];
     let filter = 'all';
@@ -27,30 +31,56 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // преобразуем в формат наших данных
             return apiTasks.map(task => ({
+                id: task.id,
                 text: task.title,
                 completed: task.completed,
-                id: task.id
             }));
         } catch (error) {
-            console.log('Ошибка загрузки данных: ', error);
-            return [];
+            console.log('Ошибка загрузки данных, используем локальные примеры: ', error);
+
+            // возвращаем дефолтный массив, если API недоступен
+            return [
+                { id: 1, text: "Покормить рыбок", completed: false },
+                { id: 2, text: "Покормить кошку", completed: false },
+                { id: 3, text: "Положить обед на работу", completed: false },
+                { id: 4, text: "Отвезти детей в детский сад", completed: false },
+                { id: 5, text: "Купить сосиски на вечер", completed: false }
+            ];
         }
     }
 
+    // async function loadInitialData() {
+    //     const apiTasks = await fetchPosts();
+    //     const localTasks = localStorage.getItem('tasks');
+    //     const savedTasks = localTasks ? JSON.parse(localTasks) : [];
+    //
+    //     const allTasks = [...savedTasks];
+    //
+    //     apiTasks.forEach(apiTask => {
+    //         if (!allTasks.some(task => task.text === apiTask.text)) {
+    //             allTasks.push(apiTask);
+    //         }
+    //     });
+    //
+    //     tasks = allTasks;
+    //     saveTasks();
+    //     renderTasks();
+    // }
+
     async function loadInitialData() {
-        const apiTasks = await fetchPosts();
         const localTasks = localStorage.getItem('tasks');
-        const savedTasks = localTasks ? JSON.parse(localTasks) : [];
+        tasks = localTasks ? JSON.parse(localTasks) : [];
 
-        const allTasks = [...savedTasks];
-
-        apiTasks.forEach(apiTask => {
-            if (!allTasks.some(task => task.text === apiTask.text)) {
-                allTasks.push(apiTask);
+        if (tasks.length === 0) {
+            try {
+                const apiTasks = await fetchPosts();
+                tasks = apiTasks;
+                console.log(`Загружено ${apiTasks.length} задач из API`);
+            } catch (error) {
+                console.log('Не удалось загрузить задачи из API');
             }
-        });
+        }
 
-        tasks = allTasks;
         saveTasks();
         renderTasks();
     }
@@ -78,10 +108,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const filteredTasks = getFilteredTasks();
 
         filteredTasks.forEach((task, index) => {
-            const realIndex = tasks.findIndex(t => t === task);
-
             const li = document.createElement('li');
             li.className = `task-item ${task.completed ? ' completed' : ''}`;
+            li.dataset.id = task.id;
 
             li.innerHTML = `
                 <input type="checkbox" ${task.completed ? 'checked' : ''}>
@@ -91,10 +120,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     `;
 
             const checkbox = li.querySelector('input[type="checkbox"]');
-            checkbox.addEventListener('change', () => toggleTask(realIndex));
+            checkbox.addEventListener('change', () => toggleTask(task.id));
 
             const deleteBtn = li.querySelector(".delete-btn");
-            deleteBtn.addEventListener('click', () => deleteTask(realIndex));
+            deleteBtn.addEventListener('click', () => deleteTask(task.id));
 
             const timer = li.querySelector('.task-timer');
             timer.addEventListener('click', () => timerTask(task.text))
@@ -106,9 +135,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // добавление задачи
     function addTask(text) {
         tasks.push({
+            id: Date.now(),
             text: text,
             completed: false,
-            id: Date.now()
         });
         console.log(`Добавлена задача ${text}`)
         saveTasks();
@@ -117,16 +146,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // проверка чекбокса
     function toggleTask(index) {
-        tasks[index].completed = !tasks[index].completed;
-        saveTasks();
-        renderTasks();
+        const taskIndex = tasks.findIndex(task => task.id === index);
+        if (taskIndex !== -1) {
+            tasks[taskIndex].completed = !tasks[taskIndex].completed;
+            saveTasks();
+            renderTasks();
+        }
     }
 
     // удаление задачи
-    function deleteTask(index) {
-        tasks.splice(index, 1);
-        saveTasks();
-        renderTasks();
+    function deleteTask(taskId) {
+        const taskIndex = tasks.findIndex(task => task.id === taskId);
+        if (taskIndex !== -1) {
+            const deletedTask = tasks[taskIndex];
+            tasks.splice(taskIndex, 1);
+            console.log(`Удалена задача: "${deletedTask.text}" (ID: ${taskId})`);
+            saveTasks();
+            renderTasks();
+        } else {
+            console.warn(`Задача с ID ${taskId} не найдена!`);
+        }
     }
 
     // установка таймера
@@ -144,7 +183,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                  ${text}`);
 
             setTimeout(() => {
-                alert(`⏰ Время дла задачи: ${text}`);
+                showCustomAlert(`⏰
+                время для задачи:
+                ${text}`);
+                // alert(`⏰ Время дла задачи: ${text}`);
             }, timerStamp * 1000);
         } else {
             alert('Пожалуйста, введите положительное число!')
@@ -152,6 +194,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // функция отображения окна
+    function showCustomAlert(text) {
+        alertMessage.innerText = text;
+        customAlert.style.display = 'block';
+    }
+
+    // функция скрытия окна
+    function hideCustomAlert() {
+        customAlert.style.display = 'none';
+    }
 
     //  обработчики событий
     submitForm.addEventListener('submit', (e) => {
@@ -178,6 +230,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     sortTaskComplete.addEventListener('click', () => {
         filter = 'completed';
         renderTasks()
+    });
+
+    okButton.addEventListener('click', () => hideCustomAlert());
+    window.addEventListener('click', function (event) {
+        if (event.target === customAlert) {
+            hideCustomAlert();
+        }
     });
 
     // renderTasks();
